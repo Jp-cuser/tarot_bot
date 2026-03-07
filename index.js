@@ -1,9 +1,21 @@
-const { Client, GatewayIntentBits, EmbedBuilder, AttachmentBuilder } = require('discord.js'); // AttachmentBuilderを追加
+const { Client, GatewayIntentBits, EmbedBuilder, AttachmentBuilder } = require('discord.js'); 
 const axios = require('axios');
 const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
+
+// 💡 インテントの設定は、ここではなく「Client」を作る場所で行います
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMessageReactions, // ⬅️ これでリアクションが検知可能になります！
+    ],
+});
+
+
 
 const tarotCards = [
     { name: '0. 愚者', tone: 'positive', upright: '自由、冒険、新しい始まり', reversed: '無計画、わがまま、不注意', image: '00_Fool.jpg' },
@@ -209,13 +221,7 @@ function checkHitAndBlow(ans, gus) {
 
 
 // Botのインスタンスを作成
-const client = new Client({
-	intents: [
-		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildMessages,
-		GatewayIntentBits.MessageContent,
-	],
-});
+
 //*****************************************************************************天気予報********************************************************************************************************************* */
 function getWeatherStatus(code) {
     const codes = {
