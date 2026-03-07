@@ -250,10 +250,14 @@ function getMouseComment(code, rainProb, maxTemp) {
 //*******************************************************************************************ネズミクイズ*********************************************************************************************** */
 // --- [追加] ジョーク画像の軽量化処理 ---
 async function getJokeImage(fileName) {
-    const imagePath = path.join(__dirname, 'images', fileName);
+    // 💡 絶対パスを作成
+    const imagePath = path.resolve(__dirname, 'images', fileName);
 
-    // 画像ファイルが存在するか確認
-    if (!fs.existsSync(imagePath)) return null;
+    // 💡 ファイルが存在するかチェック（ログに出す）
+    if (!fs.existsSync(imagePath)) {
+        console.log(`❌ ファイル不在: ${imagePath}`); // これが out.log に出るはず
+        return null;
+    }
 
     try {
         // sharpで画像を読み込む
