@@ -58,6 +58,46 @@ const tarotCards = [
     '沖縄': { lat: 26.21, lon: 127.68 }
     };
 
+const extraImages = {
+    mouse: [
+        { file: 'mouse01_hatsukanezumi.jpg', name: 'ハツカネズミ' },
+        { file: 'mouse02_akanezumi.jpg', name: 'アカネズミ' },
+        { file: 'mouse03_sunanezumi.jpg', name: 'スナネズミ' },
+        { file: 'mouse04_hamster.jpg', name: 'ハムスター' },
+        { file: 'mouse05_hatanezumi.jpg', name: 'ハタネズミ' },
+        { file: 'mouse06_tobinezumi.jpg', name: 'トビネズミ' },
+        { file: 'mouse07_yamane.jpg', name: 'ヤマネ' }
+    ],
+    rat: [
+        { file: 'rat01_kumanezumi.jpg', name: 'クマネズミ' },
+        { file: 'rat02_fansyrat.jpg', name: 'ファンシーラット' },
+        { file: 'rat04_africaoninezumi.jpg', name: 'アフリカオニネズミ' },
+        { file: 'rat03_dobunezumi.jpg', name: 'ドブネズミ' },
+        { file: 'rat05_mizuhatanezumi.jpg', name: 'ミズハタネズミ' },
+        { file: 'rat06_mekuranezumi.jpg', name: 'メクラネズミ' }
+    ],
+    not_mouse: [
+        { file: 'not01_mouse.jpg', name: 'マウス' },
+        { file: 'not02_namako_uminezumi.jpg', name: 'ナマコ（海鼠）' },
+        { file: 'not03_hukuronezumi.jpg', name: 'フクロネズミ' },
+        { file: 'not04_hanejinezumi.jpg', name: 'ハネジネズミ' },
+        { file: 'not05_harinezumi.jpg', name: 'ハリネズミ' },
+        { file: 'not06_kawanezumi.jpg', name: 'カワネズミ' },
+        { file: 'not07_jakounezumi.jpg', name: 'ジャコウネズミ' },
+        { file: 'not08_togarinezumi.jpg', name: 'トガリネズミ' },
+        { file: 'not09_debanezumi.jpg', name: 'デバネズミ' },
+        { file: 'not10_africatogenezumi.jpg', name: 'アフリカトゲネズミ' },
+        { file: 'not11_morumotto.jpg', name: 'モルモット' },
+        { file: 'not12_kapibara.jpg', name: 'カピバラ' },
+        { file: 'not13_mara.jpg', name: 'マーラ' },
+        { file: 'not14_tintira.jpg', name: 'チンチラ' },
+        { file: 'not15_degu.jpg', name: 'デグー' },
+        { file: 'not16_tobiusagi.jpg', name: 'トビウサギ' },
+        { file: 'not17_biba.jpg', name: 'ビーバー' },
+        { file: 'not18_kanngaru-nezumi.jpg', name: 'カンガルーネズミ' },
+        { file: 'not19_horinezumi.jpg', name: 'ホリネズミ' },
+    ]
+};
     
 //********************************************************************タロット*************************************************************************************************************
 // --- [追加] 画像をダウンロードして、必要なら反転させる関数 ---
@@ -75,12 +115,12 @@ async function getCardImage(imageFileName, isReversed) {
 
         // 💡 2. 圧縮設定（PNGのままでもいいですが、JPEGにすると劇的に軽くなります）
         // png({ quality: 80 }) や jpeg({ quality: 80 }) を使います
+        // index.js の画像処理部分をさらに軽量化
         const processedImageBuffer = await imageProcessor
-            .jpeg({ quality: 80, progressive: true }) 
+            .webp({ quality: 60 }) // 💡 WebPに変更し、画質を60%まで落とす（見た目はほぼ変わりません）
             .toBuffer();
-        
-        // ファイル名も .jpg に合わせておきます
-        const filename = `card_${Math.floor(Math.random() * 10000)}.jpg`;
+
+        const filename = `n_${Math.floor(Math.random() * 1000)}.webp`; // 💡 拡張子も.webpに
         return new AttachmentBuilder(processedImageBuffer, { name: filename });
 
     } catch (error) {
@@ -207,7 +247,33 @@ function getMouseComment(code, rainProb, maxTemp) {
     
     return "今日も一日、あなたにとって素敵な日になりますように！🐭✨";
 }
+//*******************************************************************************************ネズミクイズ*********************************************************************************************** */
+// --- [追加] ジョーク画像の軽量化処理 ---
+async function getJokeImage(fileName) {
+    const imagePath = path.join(__dirname, 'images', fileName);
 
+    // 画像ファイルが存在するか確認
+    if (!fs.existsSync(imagePath)) return null;
+
+    try {
+        // sharpで画像を読み込む
+        const imageProcessor = sharp(imagePath);
+        
+        // 💡 [超軽量化] WebP形式に変換し、画質を60に設定
+        const processedImageBuffer = await imageProcessor
+            .webp({ quality: 60 }) 
+            .toBuffer();
+
+        // ランダムなファイル名を生成（キャッシュ対策）
+        const randomName = `j_${Math.floor(Math.random() * 1000)}.webp`;
+
+        // Discord用のAttachmentBuilderを作成
+        return new AttachmentBuilder(processedImageBuffer, { name: randomName });
+    } catch (error) {
+        console.error(`❌ ジョーク画像の処理に失敗: ${error.message}`);
+        return null;
+    }
+}
 //****************************************************************************************コマンド処理・開始処理****************************************************************************************** */
 // 1. ログイン確認用のコードを追加（client.onの上に入れる）
 client.once('clientReady', async (c) => {
@@ -236,6 +302,9 @@ client.once('clientReady', async (c) => {
         required: true,
     }]
     },
+    { name: 'mouse', description: '可愛いマウスの画像を表示するよ、ちゅ！' },
+    { name: 'rat', description: 'かっこいいラットの画像を表示するよ、ちゅ！' },
+    { name: 'nezumi', description: 'ねずみの画像……かな？' },
     ];
 
     // 1. 拠点となるサーバーのIDを指定（ここにコピーしたIDを貼り付け）
@@ -411,6 +480,43 @@ client.on('interactionCreate', async (interaction) => {
         await interaction.editReply({ embeds: [embed]  ,ephemeral: true});
     } catch (error) {
         await interaction.editReply('天気情報の取得に失敗しました。',{ ephemeral: true});
+    }
+}
+// --- 隠しコマンド: mouse / rat / nezumi ---
+if (['mouse', 'rat', 'nezumi'].includes(interaction.commandName)) {
+    await interaction.deferReply({ ephemeral: true });
+
+    let selectedList = [];
+    let titleMsg = "";
+
+    if (interaction.commandName === 'mouse') {
+        selectedList = extraImages.mouse;
+        titleMsg = '🐭 可愛いねずみが見つかったよ！';
+    } else if (interaction.commandName === 'rat') {
+        selectedList = extraImages.rat;
+        titleMsg = '🐀 かっこいいラットが登場だちゅ！';
+    } else if (interaction.commandName === 'nezumi') {
+        selectedList = extraImages.not_mouse;
+        titleMsg = '🤔 これ……ねずみなのかなぁ……？';
+    }
+
+    // 💡 ランダムにオブジェクトを選択
+    const chosen = selectedList[Math.floor(Math.random() * selectedList.length)];
+    
+    // 💡 [修正] 以前の直接ファイル読み込みを止め、新しい関数を呼び出す
+    const attachment = await getJokeImage(chosen.file);
+    
+    if (attachment) {
+        // 💡 [修正] AttachmentBuilderのname属性（WebP）を使うようにEmbedを調整
+        const embed = new EmbedBuilder()
+            .setColor(0x00AE86)
+            .setTitle(titleMsg)
+            .setDescription(`この子の名前は **${chosen.name}** だちゅ！`)
+            .setImage(`attachment://${attachment.name}`); // 💡 生成されたファイル名を指定
+
+        await interaction.editReply({ embeds: [embed], files: [attachment], ephemeral: true });
+    } else {
+        await interaction.editReply({ content: 'ごめんね、その子は今お散歩中みたいだちゅ……。', ephemeral: true });
     }
 }
 
