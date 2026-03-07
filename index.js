@@ -161,7 +161,7 @@ client.once('clientReady', async (c) => {
     ];
 
     // 1. 拠点となるサーバーのIDを指定（ここにコピーしたIDを貼り付け）
-    const guildId = ['1450709451488100396','1455097564759330958']; 
+    const guildIds = ['1450709451488100396','1455097564759330958']; 
     const guild = client.guilds.cache.get(guildId);
 
    // 以前のグローバルコマンドが残っている場合は削除（混信を防ぐため）
