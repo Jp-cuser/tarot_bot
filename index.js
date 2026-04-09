@@ -4256,7 +4256,7 @@ client.on('interactionCreate', async (interaction) => {
 // ==========================================================
 
 // 💡 1. 固定表示したいチャンネルのIDをここに入れるちゅ！
-const STICKY_CHANNEL_ID = '1483795904183140374';
+const STICKY_CHANNEL_ID = '1452263017348857896';
 
 // 💡 再起動しても忘れないようにメモ帳(JSON)を用意するちゅ！
 const stickyDataPath = path.join(__dirname, 'sticky.json');
