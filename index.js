@@ -1439,64 +1439,6 @@ client.once('clientReady', async (c) => {
         },
         { name: 'kibun_setchannel', description: '心の天気図（週次レポート）を送信するチャンネルを、自分用に指定するちゅ！☁️' },
         { name: 'kibun_resetchannel', description: '心の天気図のレポート送信先設定をリセット（解除）するちゅ！☁️' },
-        
-        // ==========================================================
-        // 🔐 ここから下の「案内板」コマンドは、管理者(あなた)にしか見えないちゅ！
-        // ==========================================================
-        {
-            name: 'design_upload',
-            description: '【管理者用】日替わり看板のHTML/CSSデザインを登録するちゅ！',
-            default_member_permissions: '8', // 💡 【追加】管理者のみ表示する魔法だちゅ！
-            options: [
-                { name: 'date', type: 3, description: '表示したい日付（例: 03-16 または 12-25）', required: true },
-                { name: 'event_name', type: 3, description: 'イベントの名前（例: ひな祭り、クリスマス）', required: true },
-                { name: 'html_file', type: 11, description: 'Satori用のHTMLファイル', required: true },
-                { name: 'css_file', type: 11, description: '読み込ませたいCSSファイル', required: false }
-            ]
-        },
-        {
-            name: 'design_list',
-            description: '【管理者用】現在登録されている日替わり看板のリストを確認するちゅ！',
-            default_member_permissions: '8' // 💡 【追加】管理者のみ表示！
-        },
-        {
-            name: 'design_delete',
-            description: '【管理者用】登録した日替わり看板のデザインを削除するちゅ！',
-            default_member_permissions: '8', // 💡 【追加】管理者のみ表示！
-            options: [
-                { name: 'date', type: 3, description: '削除したい日付（例: 03-16）', required: true }
-            ]
-        },
-        {
-            name: 'design_test',
-            description: '【管理者用】指定した日付の看板デザインをテスト表示するちゅ！',
-            default_member_permissions: '8', // 💡 【追加】管理者のみ表示！
-            options: [
-                { name: 'date', type: 3, description: 'テスト表示したい日付（例: 03-17）', required: true }
-            ]
-        },
-        {
-            name: 'event_setup',
-            description: '【管理者用】画面(モーダル)から文字を入力して、日替わり看板を設定するちゅ！',
-            default_member_permissions: '8', // 💡 【追加】管理者のみ表示！
-            options: [
-                { name: 'date', type: 3, description: '設定したい日付（例: 03-17）', required: true },
-                {
-                    name: 'template',
-                    type: 3,
-                    description: '使いたいデザインテンプレートを選ぶちゅ！',
-                    required: true,
-                    choices: [
-                        { name: '🟢 チケット風 (グリーン)', value: 'ticket_green' },
-                        { name: '🟡 エレガント (ブラック＆ゴールド)', value: 'elegant_gold' },
-                        { name: '🌸 ポップ (パステルピンク)', value: 'pop_pink' },
-                        // 💡 【追加】ここから下の2行を追加するちゅ！
-                        { name: '🔮 ミスティック (パープル)', value: 'mystic_purple' },
-                        { name: '💧 アクア (ライトブルー)', value: 'aqua_blue' }
-                    ]
-                }
-            ]
-        },
         {
             name: 'temp_setup',
             description: '【管理者用】臨時情報の看板を設定するちゅ！',
@@ -3948,227 +3890,7 @@ client.on('interactionCreate', async (interaction) => {
             await interaction.editReply('もともと送信先チャンネルはセットされていないみたいだちゅ！☁️');
         }
     }
-    // 💡 /design_upload コマンド (日替わり看板デザインの登録)
-    // 💡 /design_upload コマンド (日替わり看板デザインの登録)
-    else if (interaction.commandName === 'design_upload') {
-        await interaction.deferReply({ ephemeral: true });
-        
-        const dateStr = interaction.options.getString('date');
-        const eventName = interaction.options.getString('event_name'); // 💡 イベント名を受け取るちゅ！
-        const htmlFile = interaction.options.getAttachment('html_file');
-        const cssFile = interaction.options.getAttachment('css_file');
 
-        const designsDir = path.join(__dirname, 'designs');
-        if (!fs.existsSync(designsDir)) {
-            fs.mkdirSync(designsDir);
-        }
-
-        try {
-            // HTMLとCSSの保存
-            const htmlRes = await axios.get(htmlFile.url);
-            fs.writeFileSync(path.join(designsDir, `${dateStr}.html`), htmlRes.data);
-
-            if (cssFile) {
-                const cssRes = await axios.get(cssFile.url);
-                fs.writeFileSync(path.join(designsDir, `${dateStr}.css`), cssRes.data);
-            }
-
-            // 💡 イベント名を events.json というメモ帳に保存するちゅ！
-            const eventsPath = path.join(designsDir, 'events.json');
-            let eventsData = {};
-            if (fs.existsSync(eventsPath)) {
-                eventsData = JSON.parse(fs.readFileSync(eventsPath, 'utf8'));
-            }
-            eventsData[dateStr] = eventName; // 日付と名前をセットで記録！
-            fs.writeFileSync(eventsPath, JSON.stringify(eventsData, null, 2));
-
-            await interaction.editReply(`📅 **${dateStr}** [🏷️ ${eventName}] のデザインを保存したちゅ！🎨✨`);
-        } catch (error) {
-            console.error('デザイン保存エラー:', error);
-            await interaction.editReply('ファイルの保存に失敗しちゃったちゅ…。');
-        }
-    }
-
-    // 💡 /design_list コマンド (登録済みデザインのリスト表示)
-    // 💡 /design_list コマンド (登録済みデザインのリスト表示)
-    else if (interaction.commandName === 'design_list') {
-        await interaction.deferReply({ ephemeral: true });
-        
-        const designsDir = path.join(__dirname, 'designs');
-
-        if (!fs.existsSync(designsDir)) {
-            return interaction.editReply('まだ何もデザインが登録されていないみたいだちゅ！📂');
-        }
-
-        const files = fs.readdirSync(designsDir);
-        const htmlFiles = files.filter(f => f.endsWith('.html'));
-
-        // ① アップロードされたファイルの記録を読み込むちゅ
-        const eventsPath = path.join(designsDir, 'events.json');
-        let eventsData = {};
-        if (fs.existsSync(eventsPath)) {
-            eventsData = JSON.parse(fs.readFileSync(eventsPath, 'utf8'));
-        }
-
-        // ② モーダルで設定したテンプレートの記録を読み込むちゅ！
-        const modalDataPath = path.join(designsDir, 'events_data.json');
-        let modalEventsData = {};
-        if (fs.existsSync(modalDataPath)) {
-            modalEventsData = JSON.parse(fs.readFileSync(modalDataPath, 'utf8'));
-        }
-
-        if (htmlFiles.length === 0 && Object.keys(modalEventsData).length === 0) {
-            return interaction.editReply('登録されている日替わり看板はないみたいだちゅ！📂');
-        }
-
-        let listStr = '📋 **現在登録されている日替わりデザイン一覧だちゅ！**\n\n';
-
-        // 💡 アップロードされたHTMLファイルのリストを追加
-        htmlFiles.forEach(file => {
-            const dateStr = file.replace('.html', '');
-            const hasCss = files.includes(`${dateStr}.css`);
-            const eName = eventsData[dateStr] || '名前なし';
-            listStr += `・📅 **${dateStr}** 🏷️ **${eName}** (📂 アップロード HTML${hasCss ? '＆CSS' : ''})\n`;
-        });
-
-        // 💡 モーダルで設定したテンプレートのリストを追加
-        // 💡 モーダルで設定したテンプレートのリストを追加
-        for (const [dateStr, data] of Object.entries(modalEventsData)) {
-            // 💡 【修正】新しいテーマの表示名を追加したちゅ！
-            const tName = data.template === 'pop_pink' ? '🌸ポップ' : 
-                          data.template === 'elegant_gold' ? '🟡エレガント' : 
-                          data.template === 'mystic_purple' ? '🔮ミスティック' :
-                          data.template === 'aqua_blue' ? '💧アクア' : '🟢チケット風';
-            
-            listStr += `・📅 **${dateStr}** 🏷️ **${data.title}** (🎨 テンプレート: ${tName})\n`;
-        }
-        await interaction.editReply(listStr);
-    }
-
-    // 💡 /design_delete コマンド (デザインの削除)
-    else if (interaction.commandName === 'design_delete') {
-        await interaction.deferReply({ ephemeral: true });
-        
-        const dateStr = interaction.options.getString('date');
-        const designsDir = path.join(__dirname, 'designs');
-        
-        const htmlPath = path.join(designsDir, `${dateStr}.html`);
-        const cssPath = path.join(designsDir, `${dateStr}.css`);
-        const eventsPath = path.join(designsDir, 'events.json'); 
-        const modalDataPath = path.join(designsDir, 'events_data.json'); // 💡 モーダル用のメモ帳
-
-        let deleted = false;
-        let deletedTypes = [];
-
-        // ① アップロードされた画像を消すちゅ
-        if (fs.existsSync(htmlPath)) { fs.unlinkSync(htmlPath); deleted = true; deletedTypes.push('ファイル'); }
-        if (fs.existsSync(cssPath)) { fs.unlinkSync(cssPath); deleted = true; }
-        
-        if (deleted && fs.existsSync(eventsPath)) {
-            let evData = JSON.parse(fs.readFileSync(eventsPath, 'utf8'));
-            if (evData[dateStr]) {
-                delete evData[dateStr];
-                fs.writeFileSync(eventsPath, JSON.stringify(evData, null, 2));
-            }
-        }
-
-        // ② モーダルで登録したデータ（events_data.json）からも消すちゅ！
-        if (fs.existsSync(modalDataPath)) {
-            let modalData = JSON.parse(fs.readFileSync(modalDataPath, 'utf8'));
-            if (modalData[dateStr]) {
-                delete modalData[dateStr]; // その日付のデータをメモ帳から消す！
-                fs.writeFileSync(modalDataPath, JSON.stringify(modalData, null, 2));
-                deleted = true;
-                deletedTypes.push('テンプレート設定');
-            }
-        }
-
-        if (deleted) {
-            await interaction.editReply(`🗑️ **${dateStr}** のデザイン（${deletedTypes.join('と')}）を綺麗にお掃除したちゅ！✨`);
-        } else {
-            await interaction.editReply(`🤔 **${dateStr}** のデザインは見つからなかったちゅ。 \`/design_list\` で日付が合っているか確認してみてちゅ！`);
-        }
-    }
-    // 💡 /design_test コマンド (指定した日付のデザインをプレビュー)
-    else if (interaction.commandName === 'design_test') {
-        await interaction.deferReply({ ephemeral: true }); // 誰にも見えないようにするちゅ！
-        
-        const dateStr = interaction.options.getString('date');
-        
-        try {
-            // 💡 2つ目の引数にテストしたい日付を渡して画像を作るちゅ！
-            const pngBuffer = await generateStickyImage('これはテスト表示だちゅ！', dateStr);
-            const attachment = new AttachmentBuilder(pngBuffer, { name: 'test_banner.png' });
-            
-            await interaction.editReply({ 
-                content: `📅 **${dateStr}** の看板デザインのテスト表示だちゅ！✨\n（※本番ではここにねずみの最新の言葉が入るちゅよ！）`, 
-                files: [attachment] 
-            });
-        } catch (e) {
-            console.error('テスト表示エラー:', e);
-            await interaction.editReply('画像の生成に失敗しちゃったちゅ…。HTMLやCSSに間違いがないか確認してちゅ！');
-        }
-    }
-    // 💡 /event_setup コマンド (モーダル入力画面を呼び出す)
-    // 💡 /event_setup コマンド (モーダル入力画面を呼び出す)
-    else if (interaction.commandName === 'event_setup') {
-        const dateStr = interaction.options.getString('date');
-        const templateType = interaction.options.getString('template'); // 💡 テンプレートの種類を受け取る！
-        const { ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
-        
-        // 💡 customIdに「日付」と「選んだテンプレート」を両方覚えさせるちゅ！
-        const modal = new ModalBuilder()
-            .setCustomId(`modal_event_${dateStr}_${templateType}`)
-            .setTitle(`${dateStr} の看板設定`);
-
-        // ... (この下の TextInputBuilder 等の処理は今までと同じでOKだちゅ！)
-
-        // 入力欄を5つ（Discordの最大数）用意するちゅ！
-        const titleInput = new TextInputBuilder().setCustomId('title').setLabel('タイトル').setPlaceholder('例: ☘️ St. Patrick\'s Day').setStyle(TextInputStyle.Short).setRequired(true);
-        const subInput = new TextInputBuilder().setCustomId('subtitle').setLabel('サブタイトル').setPlaceholder('例: 緑を身にまとって集まろう！').setStyle(TextInputStyle.Short).setRequired(false);
-        const info1Input = new TextInputBuilder().setCustomId('info1').setLabel('情報1 (日時など)').setPlaceholder('例: 📅 3月17日(火) 18:00〜').setStyle(TextInputStyle.Short).setRequired(false);
-        const info2Input = new TextInputBuilder().setCustomId('info2').setLabel('情報2 (場所など)').setPlaceholder('例: 📍 グリーン・クローバー').setStyle(TextInputStyle.Short).setRequired(false);
-        const info3Input = new TextInputBuilder().setCustomId('info3').setLabel('情報3 (内容など)').setPlaceholder('例: 🍺 ギネスビール飲み放題！').setStyle(TextInputStyle.Short).setRequired(false);
-
-        // モーダルに入力欄をセット！
-        modal.addComponents(
-            new ActionRowBuilder().addComponents(titleInput),
-            new ActionRowBuilder().addComponents(subInput),
-            new ActionRowBuilder().addComponents(info1Input),
-            new ActionRowBuilder().addComponents(info2Input),
-            new ActionRowBuilder().addComponents(info3Input)
-        );
-
-        // 画面に表示するちゅ！
-        await interaction.showModal(modal);
-    }
-    // 💡 モーダルから入力された情報を受け取って保存する処理
-    // 💡 モーダルから入力された情報を受け取って保存する処理
-    else if (interaction.isModalSubmit() && interaction.customId.startsWith('modal_event_')) {
-        
-        // 💡 "modal_event_03-17_pop_pink" のようなIDから、日付とテンプレート名を切り離して取り出すちゅ！
-        const parts = interaction.customId.split('_');
-        const dateStr = parts[2]; // "03-17"
-        const templateType = parts.slice(3).join('_'); // "pop_pink" などの名前
-        
-        const title = interaction.fields.getTextInputValue('title');
-        const subtitle = interaction.fields.getTextInputValue('subtitle') || '';
-        const info1 = interaction.fields.getTextInputValue('info1') || '';
-        const info2 = interaction.fields.getTextInputValue('info2') || '';
-        const info3 = interaction.fields.getTextInputValue('info3') || '';
-
-        const dataPath = path.join(__dirname, 'designs', 'events_data.json');
-        let eventsData = {};
-        if (fs.existsSync(dataPath)) {
-            eventsData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-        }
-        
-        // 💡 templateType も一緒に保存するちゅ！
-        eventsData[dateStr] = { title, subtitle, info1, info2, info3, template: templateType };
-        fs.writeFileSync(dataPath, JSON.stringify(eventsData, null, 2));
-
-        await interaction.editReply(`📅 **${dateStr}** の看板データを登録したちゅ！📝✨\n\`/design_test date:${dateStr}\` でプレビューを見てみてちゅ！`);
-    }
     // 💡 /temp_setup コマンド (臨時看板の入力画面を出す)
     // 💡 /temp_setup コマンド (臨時看板の入力画面を出す)
     else if (interaction.commandName === 'temp_setup') {
@@ -4278,172 +4000,9 @@ const saveStickyData = () => {
     fs.writeFileSync(stickyDataPath, JSON.stringify(obj, null, 2));
 };
 
-// 💡 Satoriを使った看板画像の生成関数（日替わり対応版）
-// 💡 Satoriを使った看板画像の生成関数（フルカラー絵文字対応版！）
-// 💡 Satoriを使った看板画像の生成関数（フルカラー絵文字「確実」表示版！）
-// 💡 2つ目の引数に forcedDateStr を追加するちゅ！
-// 💡 Satoriを使った看板画像の生成関数（モーダル入力対応版！）
-// 💡 Satoriを使った看板画像の生成関数（モーダル入力対応＆フルカラー絵文字版！）
-const generateStickyImage = async (text, forcedDateStr = null) => {
-    const d = new Date();
-    const jstD = new Date(d.getTime() + (9 * 60 * 60 * 1000));
-    const month = String(jstD.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(jstD.getUTCDate()).padStart(2, '0');
-    const todayStr = forcedDateStr || `${month}-${day}`; 
 
-    let finalMarkupStr = '';
-
-    // 💡 1. まずはモーダルで登録したデータ（events_data.json）があるか探すちゅ！
-    const dataPath = path.join(__dirname, 'designs', 'events_data.json');
-    let boardData = null;
-    if (fs.existsSync(dataPath)) {
-        const eventsData = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-        if (eventsData[todayStr]) {
-            boardData = eventsData[todayStr];
-        }
-    }
-
-    if (boardData) {
-        // 💡 保存されたテンプレート名を確認するちゅ（無ければグリーンにする）
-        const tType = boardData.template || 'ticket_green';
-
-        if (tType === 'elegant_gold') {
-            // 🟡 エレガント（ブラック＆ゴールド）
-            finalMarkupStr = `
-            <div style="display: flex; flex-direction: row; width: 600px; height: 150px; background-color: #1a1a1a; border: 4px solid #FFD700; border-radius: 10px; overflow: hidden; color: white;">
-                <div style="display: flex; flex-direction: column; justify-content: center; width: 350px; padding: 20px; border-right: 2px solid #FFD700;">
-                    <div style="display: flex; font-size: 28px; font-weight: bold; color: #FFD700; margin-bottom: 5px;">${boardData.title}</div>
-                    <div style="display: flex; font-size: 16px; color: #e0e0e0; margin-bottom: 12px;">${boardData.subtitle}</div>
-                    <div style="display: flex; font-size: 16px; font-weight: bold; color: #ffffff;">${text}</div>
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: center; width: 250px; padding: 15px; background-color: #2b2b2b;">
-                    ${boardData.info1 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #FFD700; margin-bottom: 8px;">${boardData.info1}</div>` : ''}
-                    ${boardData.info2 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #FFD700; margin-bottom: 8px;">${boardData.info2}</div>` : ''}
-                    ${boardData.info3 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #FFD700; margin-bottom: 8px;">${boardData.info3}</div>` : ''}
-                </div>
-            </div>`;
-        } else if (tType === 'pop_pink') {
-            // 🌸 ポップ（パステルピンク）※dottedをsolidに変更！
-            finalMarkupStr = `
-            <div style="display: flex; flex-direction: row; width: 600px; height: 150px; background-color: #fff0f5; border: 6px solid #ff6fa5; border-radius: 30px; overflow: hidden;">
-                <div style="display: flex; flex-direction: column; justify-content: center; width: 330px; padding: 20px; background-color: #ffe4e1; border-right: 4px dashed #ff69b4;">
-                    <div style="display: flex; font-size: 26px; font-weight: bold; color: #ff1493; margin-bottom: 5px;">${boardData.title}</div>
-                    <div style="display: flex; font-size: 16px; color: #ff69b4; margin-bottom: 12px;">${boardData.subtitle}</div>
-                    <div style="display: flex; font-size: 16px; font-weight: bold; color: #c71585;">${text}</div>
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: center; width: 270px; padding: 15px;">
-                    ${boardData.info1 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #db7093; margin-bottom: 8px;">${boardData.info1}</div>` : ''}
-                    ${boardData.info2 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #db7093; margin-bottom: 8px;">${boardData.info2}</div>` : ''}
-                    ${boardData.info3 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #db7093; margin-bottom: 8px;">${boardData.info3}</div>` : ''}
-                </div>
-            </div>`;
-        } else if (tType === 'mystic_purple') {
-            // 🔮 ミスティック（パープル: #ab8dd6 ベース）
-            finalMarkupStr = `
-            <div style="display: flex; flex-direction: row; width: 600px; height: 150px; background-color: #f5f0fa; border: 4px solid #ab8dd6; border-radius: 20px; overflow: hidden;">
-                <div style="display: flex; flex-direction: column; justify-content: center; width: 330px; padding: 20px; background-color: #e8dbf4; border-right: 4px solid #ab8dd6;">
-                    <div style="display: flex; font-size: 26px; font-weight: bold; color: #5a3c85; margin-bottom: 5px;">${boardData.title}</div>
-                    <div style="display: flex; font-size: 16px; color: #7a58a6; margin-bottom: 12px;">${boardData.subtitle}</div>
-                    <div style="display: flex; font-size: 16px; font-weight: bold; color: #4b2b73;">${text}</div>
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: center; width: 270px; padding: 15px;">
-                    ${boardData.info1 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #5a3c85; margin-bottom: 8px;">${boardData.info1}</div>` : ''}
-                    ${boardData.info2 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #5a3c85; margin-bottom: 8px;">${boardData.info2}</div>` : ''}
-                    ${boardData.info3 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #5a3c85; margin-bottom: 8px;">${boardData.info3}</div>` : ''}
-                </div>
-            </div>`;
-        } else if (tType === 'aqua_blue') {
-            // 💧 アクア（ライトブルー: #ace9ff ベース）
-            finalMarkupStr = `
-            <div style="display: flex; flex-direction: row; width: 600px; height: 150px; background-color: #f2fcff; border: 6px solid #ace9ff; border-radius: 10px; overflow: hidden;">
-                <div style="display: flex; flex-direction: column; justify-content: center; width: 330px; padding: 20px; background-color: #e0f6ff; border-right: 4px dashed #84d2f0;">
-                    <div style="display: flex; font-size: 26px; font-weight: bold; color: #25769c; margin-bottom: 5px;">${boardData.title}</div>
-                    <div style="display: flex; font-size: 16px; color: #439bc7; margin-bottom: 12px;">${boardData.subtitle}</div>
-                    <div style="display: flex; font-size: 16px; font-weight: bold; color: #175d7e;">${text}</div>
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: center; width: 270px; padding: 15px;">
-                    ${boardData.info1 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #25769c; margin-bottom: 8px;">${boardData.info1}</div>` : ''}
-                    ${boardData.info2 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #25769c; margin-bottom: 8px;">${boardData.info2}</div>` : ''}
-                    ${boardData.info3 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #25769c; margin-bottom: 8px;">${boardData.info3}</div>` : ''}
-                </div>
-            </div>`;
-        } else {
-            // 🟢 チケット風（グリーン）※デフォルト
-            finalMarkupStr = `
-            <div style="display: flex; flex-direction: row; width: 600px; height: 150px; background-color: #e8f5e9; border: 4px solid #2e7d32; border-radius: 15px; overflow: hidden;">
-                <div style="display: flex; flex-direction: column; justify-content: center; width: 330px; padding: 20px; background-color: #c8e6c9; border-right: 4px dashed #2e7d32;">
-                    <div style="display: flex; font-size: 26px; font-weight: bold; color: #1b5e20; margin-bottom: 5px;">${boardData.title}</div>
-                    <div style="display: flex; font-size: 16px; color: #2e7d32; margin-bottom: 12px;">${boardData.subtitle}</div>
-                    <div style="display: flex; font-size: 16px; font-weight: bold; color: #d32f2f;">${text}</div>
-                </div>
-                <div style="display: flex; flex-direction: column; justify-content: center; width: 270px; padding: 15px;">
-                    ${boardData.info1 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #1b5e20; margin-bottom: 8px;">${boardData.info1}</div>` : ''}
-                    ${boardData.info2 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #1b5e20; margin-bottom: 8px;">${boardData.info2}</div>` : ''}
-                    ${boardData.info3 ? `<div style="display: flex; align-items: center; font-size: 15px; color: #1b5e20; margin-bottom: 8px;">${boardData.info3}</div>` : ''}
-                </div>
-            </div>`;
-        }
-    } 
-    else {
-        // ... (この下のデータが無い時の処理は今まで通りでOKだちゅ！)
-        // 💡 3. データがなければ、今までのファイル読み込み or デフォルト看板を出すちゅ！
-        const htmlPath = path.join(__dirname, 'designs', `${todayStr}.html`);
-        const cssPath = path.join(__dirname, 'designs', `${todayStr}.css`);
-
-        if (fs.existsSync(htmlPath)) {
-            let customHtml = fs.readFileSync(htmlPath, 'utf8');
-            let customCss = fs.existsSync(cssPath) ? fs.readFileSync(cssPath, 'utf8') : '';
-            customHtml = customHtml.replace('{{text}}', text);
-            finalMarkupStr = customCss ? `<style>${customCss}</style>${customHtml}` : customHtml;
-        } else {
-            finalMarkupStr = `<div style="display: flex; flex-direction: column; background-color: #2b2d31; color: white; width: 600px; height: 150px; align-items: center; justify-content: center; border: 4px solid #f5c4c9; border-radius: 15px; box-shadow: 0 8px 16px rgba(0,0,0,0.5);">
-                <div style="display: flex; font-size: 32px; font-weight: bold; margin-bottom: 10px; color: #f5c4c9;">
-                    🐭 ねずみの案内板 🧀
-                </div>
-                <div style="display: flex; font-size: 24px; color: #e0e0e0;">
-                    ${text}
-                </div>
-            </div>`;
-        }
-    }
-
-    const fontBuffer = fs.readFileSync(path.join(__dirname, 'fonts', 'LINESeedJP-Regular.ttf'));
-
-    const svg = await satori(html(finalMarkupStr), {
-        width: 600,
-        height: 150,
-        fonts: [
-            { name: 'NotoSansJP', data: fontBuffer, weight: 400, style: 'normal' }
-        ],
-        // 💡 【超重要】Twemojiを「直接ダウンロードしてBase64で埋め込む」魔法だちゅ！
-        loadAdditionalAsset: async (languageCode, segment) => {
-            if (languageCode === 'emoji') {
-                try {
-                    const codePoints = Array.from(segment).map(char => char.codePointAt(0).toString(16));
-                    const u = codePoints.filter(c => c !== 'fe0f').join('-');
-                    const url = `https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/${u}.svg`;
-                    const res = await axios.get(url, { responseType: 'arraybuffer' });
-                    return `data:image/svg+xml;base64,${Buffer.from(res.data).toString('base64')}`;
-                } catch (e) {
-                    console.error(`絵文字(${segment})の読み込みエラー:`, e.message);
-                    return '';
-                }
-            }
-            return '';
-        }
-    });
-
-    const resvg = new Resvg(svg, { background: 'transparent', fitTo: { mode: 'original' } });
-    return resvg.render().asPng();
-};
 // ==========================================================
-// 🚨 臨時看板の画像を作る魔法だちゅ！
-// ==========================================================
-// ==========================================================
-// 🚨 臨時看板の画像を作る魔法だちゅ！
-// ==========================================================
-// ==========================================================
-// 🚨 臨時看板の画像を作る魔法だちゅ！
+// 🚨 臨時看板（案内板）の画像を作る魔法だちゅ！
 // ==========================================================
 const generateTempStickyImage = async (tempData) => {
     const fontBuffer = fs.readFileSync(path.join(__dirname, 'fonts', 'LINESeedJP-Regular.ttf'));
@@ -4454,10 +4013,16 @@ const generateTempStickyImage = async (tempData) => {
     const tType = tempData.template || 'alert_red';
     let markup = '';
 
-    // 💡 Satoriが読めない「box-sizing: border-box;」を全部消したちゅ！
+    // 💡 共通の「ねずみの案内板」ヘッダーHTMLパーツだちゅ！
+    const headerHtml = `
+        <div style="display: flex; font-size: 20px; font-weight: bold; color: #666; margin-bottom: 5px; opacity: 0.8;">
+            🐭 ねずみの案内板 🧀
+        </div>`;
+
     if (tType === 'elegant_gold') {
         markup = `
         <div style="display: flex; flex-direction: column; justify-content: center; width: 600px; height: 180px; background-color: #1a1a1a; border: 6px solid #FFD700; border-radius: 15px; padding: 20px;">
+            ${headerHtml}
             <div style="display: flex; font-size: 26px; font-weight: bold; color: #FFD700; margin-bottom: 8px; border-bottom: 2px dashed #FFD700; padding-bottom: 5px;">
                 ${tempData.title}
             </div>
@@ -4468,6 +4033,7 @@ const generateTempStickyImage = async (tempData) => {
     } else if (tType === 'ticket_green') {
         markup = `
         <div style="display: flex; flex-direction: column; justify-content: center; width: 600px; height: 180px; background-color: #e8f5e9; border: 6px solid #2e7d32; border-radius: 15px; padding: 20px;">
+            ${headerHtml}
             <div style="display: flex; font-size: 26px; font-weight: bold; color: #1b5e20; margin-bottom: 8px; border-bottom: 2px dashed #2e7d32; padding-bottom: 5px;">
                 ${tempData.title}
             </div>
@@ -4478,6 +4044,7 @@ const generateTempStickyImage = async (tempData) => {
     } else if (tType === 'pop_pink') {
         markup = `
         <div style="display: flex; flex-direction: column; justify-content: center; width: 600px; height: 180px; background-color: #fff0f5; border: 6px solid #ff6fa5; border-radius: 15px; padding: 20px;">
+            ${headerHtml}
             <div style="display: flex; font-size: 26px; font-weight: bold; color: #ff1493; margin-bottom: 8px; border-bottom: 2px dashed #ff69b4; padding-bottom: 5px;">
                 ${tempData.title}
             </div>
@@ -4488,6 +4055,7 @@ const generateTempStickyImage = async (tempData) => {
     } else if (tType === 'mystic_purple') {
         markup = `
         <div style="display: flex; flex-direction: column; justify-content: center; width: 600px; height: 180px; background-color: #f5f0fa; border: 6px solid #ab8dd6; border-radius: 15px; padding: 20px;">
+            ${headerHtml}
             <div style="display: flex; font-size: 26px; font-weight: bold; color: #5a3c85; margin-bottom: 8px; border-bottom: 2px dashed #ab8dd6; padding-bottom: 5px;">
                 ${tempData.title}
             </div>
@@ -4498,6 +4066,7 @@ const generateTempStickyImage = async (tempData) => {
     } else if (tType === 'aqua_blue') {
         markup = `
         <div style="display: flex; flex-direction: column; justify-content: center; width: 600px; height: 180px; background-color: #f2fcff; border: 6px solid #ace9ff; border-radius: 15px; padding: 20px;">
+            ${headerHtml}
             <div style="display: flex; font-size: 26px; font-weight: bold; color: #25769c; margin-bottom: 8px; border-bottom: 2px dashed #84d2f0; padding-bottom: 5px;">
                 ${tempData.title}
             </div>
@@ -4509,6 +4078,7 @@ const generateTempStickyImage = async (tempData) => {
         // 🚨 アラート（レッド）※デフォルト
         markup = `
         <div style="display: flex; flex-direction: column; justify-content: center; width: 600px; height: 180px; background-color: #fff5f5; border: 6px solid #e53e3e; border-radius: 15px; padding: 20px;">
+            ${headerHtml}
             <div style="display: flex; font-size: 26px; font-weight: bold; color: #c53030; margin-bottom: 8px; border-bottom: 2px dashed #fc8181; padding-bottom: 5px;">
                 ${tempData.title}
             </div>
@@ -4539,56 +4109,59 @@ const generateTempStickyImage = async (tempData) => {
     return resvg.render().asPng();
 };
 // ==========================================================
-// 📦 画像たちをセットにして準備するまとめ役だちゅ！
+// 🐭 デフォルト案内板の画像を作る魔法（臨時情報がない時用）
 // ==========================================================
+const generateDefaultStickyImage = async (text) => {
+    const fontBuffer = fs.readFileSync(path.join(__dirname, 'fonts', 'LINESeedJP-Regular.ttf'));
+    const markup = `
+    <div style="display: flex; flex-direction: column; background-color: #2b2d31; color: white; width: 600px; height: 180px; align-items: center; justify-content: center; border: 6px solid #f5c4c9; border-radius: 15px;">
+        <div style="display: flex; font-size: 36px; font-weight: bold; margin-bottom: 15px; color: #f5c4c9;">
+            🐭 ねずみの案内板 🧀
+        </div>
+        <div style="display: flex; font-size: 20px; color: #e0e0e0;">
+            ${text}
+        </div>
+    </div>`;
+
+    const svg = await satori(html(markup), {
+        width: 600,
+        height: 180,
+        fonts: [{ name: 'NotoSansJP', data: fontBuffer, weight: 400, style: 'normal' }],
+        loadAdditionalAsset: async (languageCode, segment) => {
+            if (languageCode === 'emoji') {
+                try {
+                    const codePoints = Array.from(segment).map(char => char.codePointAt(0).toString(16));
+                    const u = codePoints.filter(c => c !== 'fe0f').join('-');
+                    const res = await axios.get(`https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/${u}.svg`, { responseType: 'arraybuffer' });
+                    return `data:image/svg+xml;base64,${Buffer.from(res.data).toString('base64')}`;
+                } catch (e) { return ''; }
+            }
+            return '';
+        }
+    });
+
+    const resvg = new Resvg(svg, { background: 'transparent', fitTo: { mode: 'original' } });
+    return resvg.render().asPng();
+};
+
 // ==========================================================
-// 📦 画像たちをセットにして準備するまとめ役だちゅ！
+// 📦 画像を準備するまとめ役だちゅ！（完全統合1枚バージョン！）
 // ==========================================================
 const getStickyAttachments = async () => {
-    let tempBuffer = null;
-    let dailyBuffer = await generateStickyImage('いつでも最新の情報をここでお知らせするちゅ！');
-
-    // 1. 臨時看板（上）のデータがあれば画像を作るちゅ！
     const tempPath = path.join(__dirname, 'designs', 'temp_board.json');
+    
+    // 💡 1. 臨時看板（案内板）のデータがあれば、その画像を1枚だけ返すちゅ！
     if (fs.existsSync(tempPath)) {
         try {
             const tempData = JSON.parse(fs.readFileSync(tempPath, 'utf8'));
-            tempBuffer = await generateTempStickyImage(tempData);
+            const tempBuffer = await generateTempStickyImage(tempData);
+            return [new AttachmentBuilder(tempBuffer, { name: 'sticky_banner.png' })];
         } catch(e) { console.error('臨時看板エラー:', e); }
     }
 
-    // 2. もし臨時看板がなかったら、いつもの看板だけをそのまま返すちゅ！
-    if (!tempBuffer) {
-        return [new AttachmentBuilder(dailyBuffer, { name: 'sticky_banner.png' })];
-    }
-
-    // 3. 両方ある場合は、「1枚の縦長画像」に合体させる魔法を使うちゅ！
-    try {
-        // 既に上の方で読み込んでいる魔法（Canvas）を使うちゅ！
-        const tempImg = await loadImage(tempBuffer);
-        const dailyImg = await loadImage(dailyBuffer);
-        
-        const gap = 15; // 2つの看板の間の隙間だちゅ（15px）
-        const canvasWidth = Math.max(tempImg.width, dailyImg.width); 
-        const canvasHeight = tempImg.height + dailyImg.height + gap;
-        
-        const canvas = createCanvas(canvasWidth, canvasHeight);
-        const ctx = canvas.getContext('2d');
-        
-        // 背景を透明にして、上に臨時看板、下に日替わり看板を描き込むちゅ！
-        ctx.drawImage(tempImg, 0, 0);
-        ctx.drawImage(dailyImg, 0, tempImg.height + gap);
-        
-        const mergedBuffer = await canvas.encode('png');
-        
-        // 💡 1枚の大きな画像としてDiscordに渡すちゅ！
-        return [new AttachmentBuilder(mergedBuffer, { name: 'sticky_banner.png' })];
-        
-    } catch (e) {
-        console.error('画像合体エラー:', e);
-        // 合体に失敗した時は、とりあえず日替わり看板だけ返すちゅ
-        return [new AttachmentBuilder(dailyBuffer, { name: 'sticky_banner.png' })];
-    }
+    // 💡 2. 臨時看板が設定されていなければ、デフォルトの「ねずみの案内板」を返すちゅ！
+    const defaultBuffer = await generateDefaultStickyImage('いつでも最新の情報をここでお知らせするちゅ！');
+    return [new AttachmentBuilder(defaultBuffer, { name: 'sticky_banner.png' })];
 };
 
 // 💡 誰かがメッセージを書き込んだ時の処理
@@ -4673,43 +4246,6 @@ client.on('messageCreate', async (message) => {
             console.error('最下段画像の設置エラーだちゅ:', e);
         }
     }
-});
-// ==========================================================
-// 🕛 【追加】毎日深夜0時に自動で看板を掛け替える魔法！
-// ==========================================================
-cron.schedule('0 0 * * *', async () => {
-    console.log('📅 日付が変わったちゅ！看板を新しいものに掛け替えるちゅ！');
-    
-    try {
-        // 💡 1. チャンネルを見つけてくるちゅ！
-        const channel = await client.channels.fetch(STICKY_CHANNEL_ID);
-        if (!channel) return;
-
-        // 💡 2. 昨日まで置いてあった古い看板を消すちゅ！
-        const lastId = stickyMessageIds.get(STICKY_CHANNEL_ID);
-        if (lastId) {
-            try {
-                const lastMsg = await channel.messages.fetch(lastId);
-                if (lastMsg) await lastMsg.delete();
-            } catch (e) {
-                // 誰かが既に消していた場合は気にしないちゅ
-            }
-        }
-
-        // 💡 3. 新しい「今日の日付」の画像を作って、送信するちゅ！
-        const attachments = await getStickyAttachments();
-        const sentMsg = await channel.send({ files: attachments });
-
-        // 💡 4. 新しい画像のIDを記憶してメモ帳に保存するちゅ！
-        stickyMessageIds.set(STICKY_CHANNEL_ID, sentMsg.id);
-        saveStickyData();
-        
-        console.log('✨ 日替わり看板の自動掛け替えが完了したちゅ！');
-    } catch (e) {
-        console.error('深夜の看板掛け替えエラーだちゅ:', e);
-    }
-}, {
-    timezone: "Asia/Tokyo" // 日本時間の深夜0時に合わせるちゅ！
 });
 // ==========================================================
 // 🏰 寮ポイント：B. リアクション連動ボーナス
