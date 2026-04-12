@@ -1,8 +1,8 @@
-const { 
-    Client, 
-    GatewayIntentBits, 
+const {
+    Client,
+    GatewayIntentBits,
     Partials,
-    EmbedBuilder, 
+    EmbedBuilder,
     AttachmentBuilder,
     ActionRowBuilder,
     ButtonBuilder,
@@ -142,36 +142,36 @@ const extraImages = {
     ]
 };
 const signs = [
-    '牡羊座', '牡牛座', '双子座', '蟹座', '獅子座', '乙女座', 
+    '牡羊座', '牡牛座', '双子座', '蟹座', '獅子座', '乙女座',
     '天秤座', '蠍座', '射手座', '山羊座', '水瓶座', '魚座'
 ];
 
-const luckyItems = ['チーズ', 'ひまわりの種', '銀のさじ', '赤いリボン', '和歌山みかん', 'お気に入りの靴下']; 
+const luckyItems = ['チーズ', 'ひまわりの種', '銀のさじ', '赤いリボン', '和歌山みかん', 'お気に入りの靴下'];
 const runeAlphabet = [
-    { name: 'フェイヒュー (Fehu)', symbol: 'ᚠ', meaning: '富・家畜', upright: '金運上昇。努力が形になる時だちゅ！', reversed: '無駄遣いや損失に注意が必要だちゅ。' ,image: 'R_01_Fehu.jpg'},
-    { name: 'ウルズ (Uruz)', symbol: 'ᚢ', meaning: '力・野生牛', upright: '強いエネルギーに満ちているちゅ！前進あるのみ。', reversed: '力が空回りしそう。休息も大事だちゅ。' ,image: 'R_02_Uruz.jpg'},
-    { name: 'ソーン (Thurisaz)', symbol: 'ᚦ', meaning: '巨人・トゲ', upright: '守護と決断。慎重に状況を見極めてちゅ。', reversed: '強引な行動はトラブルの元。立ち止まってちゅ。' ,image: 'R_03_Thurisaz.jpg'},
-    { name: 'アンスズ (Ansuz)', symbol: 'ᚨ', meaning: '口・神', upright: '良い知らせや知恵が届くちゅ。対話を大切に。', reversed: '誤解や情報の混乱に気をつけてちゅ。' ,image: 'R_04_Ansuz.jpg'},
-    { name: 'ライド (Raido)', symbol: 'ᚱ', meaning: '旅・車輪', upright: 'スムーズな進行。旅行や移動にツキがあるちゅ！', reversed: '計画の遅延や足止めの予感。焦りは禁物だちゅ。' ,image: 'R_05_Raidho.jpg'},
-    { name: 'ケナズ (Kenaz)', symbol: 'ᚲ', meaning: '松明・火', upright: '才能の開花。アイデアが次々湧いてくるちゅ！', reversed: '情熱の減退。今は無理に動かず充電してちゅ。' ,image: 'R_06_Kenaz.jpg'},
-    { name: 'ゲーボ (Gebo)', symbol: 'ᚷ', meaning: '贈り物・愛', upright: '対等な関係や素晴らしいギフトが届く予感だちゅ。', reversed: '対等な関係や素晴らしいギフトが届く予感だちゅ。' ,image: 'R_07_Gebo.jpg'},
-    { name: 'ウンニョ (Wunjo)', symbol: 'ᚹ', meaning: '喜び・勝利', upright: '願いが叶う幸運期だちゅ！心から楽しんで。', reversed: '期待しすぎに注意。小さな幸せを大切にしてちゅ。' ,image: 'R_08_Wunjo.jpg'},
-    { name: 'ハガラズ (Hagalaz)', symbol: 'ᚻ', meaning: '雹（ひょう）', upright: '予期せぬ変化。古いものを壊して次に進むちゅ！', reversed: '予期せぬ変化。古いものを壊して次に進むちゅ！' ,image: 'R_09_Hagalaz.jpg'},
-    { name: 'ナウズ (Nauthiz)', symbol: 'ᚾ', meaning: '欠乏・束縛', upright: '忍耐の時。不自由さの中から学びがあるちゅ。', reversed: '焦って動くと裏目に出るちゅ。慎重に。' ,image: 'R_10_Nauthiz.jpg'},
-    { name: 'イサ (Isa)', symbol: 'ᛁ', meaning: '氷・停止', upright: '今は停止の時。静かにチャンスを待つんだちゅ。', reversed: '今は停止の時。静かにチャンスを待つんだちゅ。' ,image: 'R_11_Isa.jpg'},
-    { name: 'ジェラ (Jera)', symbol: 'ᛃ', meaning: '収穫・一年', upright: 'これまでの努力が実を結ぶ収穫の時だちゅ！', reversed: 'これまでの努力が実を結ぶ収穫の時だちゅ！' ,image: 'R_12_Jera.jpg'},
-    { name: 'エイワズ (Eihwaz)', symbol: 'ᛇ', meaning: 'イチイの木・死', upright: '変化と再生。古い自分から脱皮する時だちゅ。', reversed: '変化と再生。古い自分から脱皮する時だちゅ。' ,image: 'R_13_Eihwaz.jpg'},
-    { name: 'パース (Pertho)', symbol: 'ᛈ', meaning: '運命の袋・秘密', upright: '隠れた才能や予期せぬ幸運が見つかるちゅ！', reversed: '秘密が漏れるかも。軽はずみな言動に注意だちゅ。' ,image: 'R_14_Pertho.jpg'},
-    { name: 'アルジズ (Algiz)', symbol: 'ᛉ', meaning: '保護・ヘラジカ', upright: '強い守護があるちゅ。直感を信じて進んで！', reversed: '無防備な状態。隙を見せないように用心してちゅ。' ,image: 'R_15_Algiz.jpg'},
-    { name: 'ソウィロ (Sowilo)', symbol: 'ᛊ', meaning: '太陽・勝利', upright: '大成功の兆し！明るい未来が待っているちゅ。', reversed: '大成功の兆し！明るい未来が待っているちゅ。' ,image: 'R_16_Sowilo.jpg'},
-    { name: 'ティワズ (Tiwaz)', symbol: 'ᛏ', meaning: '戦士・勝利', upright: '強い意志で勝利を掴めるちゅ。勇気を出して。', reversed: '意欲の低下。自信を失わないようにしてちゅ。' ,image: 'R_17_Tiwaz.jpg'},
-    { name: 'ベルカナ (Berkana)', symbol: 'ᛒ', meaning: '樺の木・誕生', upright: '新しい始まりや成長。優しさが鍵になるちゅ。', reversed: '成長の停滞。家庭内の不和に注意してちゅ。' ,image: 'R_18_Berkana.jpg'},
-    { name: 'エワズ (Ehwaz)', symbol: 'ᛖ', meaning: '馬・協力', upright: '良きパートナーシップ。協力して進むと吉だちゅ。', reversed: '足並みが揃わない。無理に合わせず様子を見てちゅ。' ,image: 'R_19_Ehwaz.jpg'},
-    { name: 'マナズ (Mannaz)', symbol: 'ᛗ', meaning: '人間・自己', upright: '自分自身を見つめ直す時。謙虚さが運を呼ぶちゅ。', reversed: '自己中心的な考えに注意。周囲を大切にしてちゅ。' ,image: 'R_20_Mannaz.jpg'},
-    { name: 'ラグズ (Laguz)', symbol: 'ᛚ', meaning: '水・直感', upright: '豊かな感性。インスピレーションを大切にちゅ。', reversed: '感情に流されやすい時。冷静さを保ってちゅ。' ,image: 'R_21_Laguz.jpg'},
-    { name: 'イングズ (Inguz)', symbol: 'ᛝ', meaning:'豊穣の神・完成', upright: '一つの区切り。満たされた気持ちになれるちゅ。', reversed:'一つの区切り。満たされた気持ちになれるちゅ。' ,image:'R_22_Inguz.jpg'},
-    { name:'ダガズ (Dagaz)', symbol:'ᛞ', meaning:'一日・光', upright:'暗闇が終わり、光が差す時。希望を持ってちゅ！', reversed:'暗闇が終わり、光が差す時。希望を持ってちゅ！' ,image:'R_23_Dagaz.jpg'},
-    { name:'オサラ (Othala)', symbol:'ᛟ', meaning:'故郷・伝統', upright:'伝統や家族からの恩恵。基盤を固める時だちゅ。', reversed:'執着しすぎに注意。新しい風を取り入れてちゅ。' ,image:'R_24_Othala.jpg'}
+    { name: 'フェイヒュー (Fehu)', symbol: 'ᚠ', meaning: '富・家畜', upright: '金運上昇。努力が形になる時だちゅ！', reversed: '無駄遣いや損失に注意が必要だちゅ。', image: 'R_01_Fehu.jpg' },
+    { name: 'ウルズ (Uruz)', symbol: 'ᚢ', meaning: '力・野生牛', upright: '強いエネルギーに満ちているちゅ！前進あるのみ。', reversed: '力が空回りしそう。休息も大事だちゅ。', image: 'R_02_Uruz.jpg' },
+    { name: 'ソーン (Thurisaz)', symbol: 'ᚦ', meaning: '巨人・トゲ', upright: '守護と決断。慎重に状況を見極めてちゅ。', reversed: '強引な行動はトラブルの元。立ち止まってちゅ。', image: 'R_03_Thurisaz.jpg' },
+    { name: 'アンスズ (Ansuz)', symbol: 'ᚨ', meaning: '口・神', upright: '良い知らせや知恵が届くちゅ。対話を大切に。', reversed: '誤解や情報の混乱に気をつけてちゅ。', image: 'R_04_Ansuz.jpg' },
+    { name: 'ライド (Raido)', symbol: 'ᚱ', meaning: '旅・車輪', upright: 'スムーズな進行。旅行や移動にツキがあるちゅ！', reversed: '計画の遅延や足止めの予感。焦りは禁物だちゅ。', image: 'R_05_Raidho.jpg' },
+    { name: 'ケナズ (Kenaz)', symbol: 'ᚲ', meaning: '松明・火', upright: '才能の開花。アイデアが次々湧いてくるちゅ！', reversed: '情熱の減退。今は無理に動かず充電してちゅ。', image: 'R_06_Kenaz.jpg' },
+    { name: 'ゲーボ (Gebo)', symbol: 'ᚷ', meaning: '贈り物・愛', upright: '対等な関係や素晴らしいギフトが届く予感だちゅ。', reversed: '対等な関係や素晴らしいギフトが届く予感だちゅ。', image: 'R_07_Gebo.jpg' },
+    { name: 'ウンニョ (Wunjo)', symbol: 'ᚹ', meaning: '喜び・勝利', upright: '願いが叶う幸運期だちゅ！心から楽しんで。', reversed: '期待しすぎに注意。小さな幸せを大切にしてちゅ。', image: 'R_08_Wunjo.jpg' },
+    { name: 'ハガラズ (Hagalaz)', symbol: 'ᚻ', meaning: '雹（ひょう）', upright: '予期せぬ変化。古いものを壊して次に進むちゅ！', reversed: '予期せぬ変化。古いものを壊して次に進むちゅ！', image: 'R_09_Hagalaz.jpg' },
+    { name: 'ナウズ (Nauthiz)', symbol: 'ᚾ', meaning: '欠乏・束縛', upright: '忍耐の時。不自由さの中から学びがあるちゅ。', reversed: '焦って動くと裏目に出るちゅ。慎重に。', image: 'R_10_Nauthiz.jpg' },
+    { name: 'イサ (Isa)', symbol: 'ᛁ', meaning: '氷・停止', upright: '今は停止の時。静かにチャンスを待つんだちゅ。', reversed: '今は停止の時。静かにチャンスを待つんだちゅ。', image: 'R_11_Isa.jpg' },
+    { name: 'ジェラ (Jera)', symbol: 'ᛃ', meaning: '収穫・一年', upright: 'これまでの努力が実を結ぶ収穫の時だちゅ！', reversed: 'これまでの努力が実を結ぶ収穫の時だちゅ！', image: 'R_12_Jera.jpg' },
+    { name: 'エイワズ (Eihwaz)', symbol: 'ᛇ', meaning: 'イチイの木・死', upright: '変化と再生。古い自分から脱皮する時だちゅ。', reversed: '変化と再生。古い自分から脱皮する時だちゅ。', image: 'R_13_Eihwaz.jpg' },
+    { name: 'パース (Pertho)', symbol: 'ᛈ', meaning: '運命の袋・秘密', upright: '隠れた才能や予期せぬ幸運が見つかるちゅ！', reversed: '秘密が漏れるかも。軽はずみな言動に注意だちゅ。', image: 'R_14_Pertho.jpg' },
+    { name: 'アルジズ (Algiz)', symbol: 'ᛉ', meaning: '保護・ヘラジカ', upright: '強い守護があるちゅ。直感を信じて進んで！', reversed: '無防備な状態。隙を見せないように用心してちゅ。', image: 'R_15_Algiz.jpg' },
+    { name: 'ソウィロ (Sowilo)', symbol: 'ᛊ', meaning: '太陽・勝利', upright: '大成功の兆し！明るい未来が待っているちゅ。', reversed: '大成功の兆し！明るい未来が待っているちゅ。', image: 'R_16_Sowilo.jpg' },
+    { name: 'ティワズ (Tiwaz)', symbol: 'ᛏ', meaning: '戦士・勝利', upright: '強い意志で勝利を掴めるちゅ。勇気を出して。', reversed: '意欲の低下。自信を失わないようにしてちゅ。', image: 'R_17_Tiwaz.jpg' },
+    { name: 'ベルカナ (Berkana)', symbol: 'ᛒ', meaning: '樺の木・誕生', upright: '新しい始まりや成長。優しさが鍵になるちゅ。', reversed: '成長の停滞。家庭内の不和に注意してちゅ。', image: 'R_18_Berkana.jpg' },
+    { name: 'エワズ (Ehwaz)', symbol: 'ᛖ', meaning: '馬・協力', upright: '良きパートナーシップ。協力して進むと吉だちゅ。', reversed: '足並みが揃わない。無理に合わせず様子を見てちゅ。', image: 'R_19_Ehwaz.jpg' },
+    { name: 'マナズ (Mannaz)', symbol: 'ᛗ', meaning: '人間・自己', upright: '自分自身を見つめ直す時。謙虚さが運を呼ぶちゅ。', reversed: '自己中心的な考えに注意。周囲を大切にしてちゅ。', image: 'R_20_Mannaz.jpg' },
+    { name: 'ラグズ (Laguz)', symbol: 'ᛚ', meaning: '水・直感', upright: '豊かな感性。インスピレーションを大切にちゅ。', reversed: '感情に流されやすい時。冷静さを保ってちゅ。', image: 'R_21_Laguz.jpg' },
+    { name: 'イングズ (Inguz)', symbol: 'ᛝ', meaning: '豊穣の神・完成', upright: '一つの区切り。満たされた気持ちになれるちゅ。', reversed: '一つの区切り。満たされた気持ちになれるちゅ。', image: 'R_22_Inguz.jpg' },
+    { name: 'ダガズ (Dagaz)', symbol: 'ᛞ', meaning: '一日・光', upright: '暗闇が終わり、光が差す時。希望を持ってちゅ！', reversed: '暗闇が終わり、光が差す時。希望を持ってちゅ！', image: 'R_23_Dagaz.jpg' },
+    { name: 'オサラ (Othala)', symbol: 'ᛟ', meaning: '故郷・伝統', upright: '伝統や家族からの恩恵。基盤を固める時だちゅ。', reversed: '執着しすぎに注意。新しい風を取り入れてちゅ。', image: 'R_24_Othala.jpg' }
 ];
 const sushiMenu = [
     { name: 'マグロ (2貫)', price: 400, image: 's_maguro.jpg', description: '定番の赤身。濃厚な旨味だちゅ！' },
@@ -200,7 +200,7 @@ const HOUSE_EMOJIS = {
     '👻': '1462474772863652051'
 };
 
-const ALLOWED_CATEGORY_IDS = ['1450709451488100396','1450712250514935960'];
+const ALLOWED_CATEGORY_IDS = ['1450709451488100396', '1450712250514935960'];
 
 const houseDataPath = path.join(__dirname, 'house_points.json');
 let houseData = { points: {}, daily: {}, reactionAwarded: [] };
@@ -233,11 +233,11 @@ function getJSTInfo() {
     const now = new Date();
     const jstStr = now.toLocaleString("en-US", { timeZone: "Asia/Tokyo" });
     const jstDate = new Date(jstStr);
-    
+
     const y = jstDate.getFullYear();
     const m = jstDate.getMonth() + 1;
     const d = jstDate.getDate();
-    
+
     return {
         dateStr: `${y}-${m}-${d}`,
         displayDate: `${y}/${m}/${d}`,
@@ -272,13 +272,13 @@ async function callLocalLLM(prompt) {
         return response.data.response.trim();
     } catch (error) {
         console.error('❌ ローカルLLMもダウンしてるちゅ:', error.message);
-        
+
         // 💡 ここを追加！Ollamaの本当の文句（404の理由）をログに詳しく出すちゅ！
         if (error.response && error.response.data) {
             console.error('🔍 Ollamaの言い分:', error.response.data);
         }
-        
-        throw error; 
+
+        throw error;
     }
 }
 // 💡 【修正】画像圧縮関数 (接頭辞 prefix を追加して、寿司とペットを区別できるようにしたちゅ！)
@@ -289,16 +289,16 @@ async function compressAndGetAttachment(imageFileName, targetWidth = 500, prefix
 
         // 💡 Sharpでリサイズ＆WebP圧縮して、Discordに送れるAttachmentにするちゅ
         const imageBuffer = await sharp(imagePath)
-            .resize(targetWidth) 
+            .resize(targetWidth)
             .webp({ quality: 60 }) // 💡 画質を60%に落として圧縮！
             .toBuffer();
-        
+
         // 接頭辞prefixを使ってランダムな名前を作るちゅ
         const randomName = `${prefix}_${Date.now()}.webp`;
         return new AttachmentBuilder(imageBuffer, { name: randomName });
     } catch (error) {
         console.error('画像圧縮エラー:', error.message);
-        return null; 
+        return null;
     }
 }
 // 💡 【追加】Canvasで長い文章を指定の幅で綺麗に折り返して描画する魔法の関数だちゅ！
@@ -365,23 +365,23 @@ async function getCardImage(imageFileName, isReversed) {
         return new AttachmentBuilder(processedImageBuffer, { name: filename });
     } catch (error) {
         console.error('画像処理エラー:', error.message);
-        return null; 
+        return null;
     }
 }
 
 function getPersonalDailyRandom(userId, seedOffset = 0) {
     const jst = getJSTInfo();
-    const dateNum = jst.seedDate; 
-    const userNumericId = parseInt(userId.slice(-8), 10); 
+    const dateNum = jst.seedDate;
+    const userNumericId = parseInt(userId.slice(-8), 10);
     const finalSeed = dateNum + userNumericId + seedOffset;
     const x = Math.sin(finalSeed) * 10000;
     return x - Math.floor(x);
 }
 
 function calculateScore(card, isReversed) {
-    if (card.tone === 'positive') return isReversed ? 1 : 2;  
-    if (card.tone === 'negative') return isReversed ? -1 : -2; 
-    return 0; 
+    if (card.tone === 'positive') return isReversed ? 1 : 2;
+    if (card.tone === 'negative') return isReversed ? -1 : -2;
+    return 0;
 }
 
 function generateTarotStory(past, present, future) {
@@ -432,7 +432,7 @@ const readingCache = new Map();
 // 💡 修正：Geminiが失敗したらローカルLLMに回すハイブリッド版
 async function getGeminiReading(cardName, isReversed, username) {
     const jst = getJSTInfo();
-    const dateStr = jst.dateStr; 
+    const dateStr = jst.dateStr;
     const cacheKey = `tarot-${dateStr}-${username}-${cardName}-${isReversed}`;
 
     if (readingCache.has(cacheKey)) return readingCache.get(cacheKey);
@@ -443,7 +443,7 @@ async function getGeminiReading(cardName, isReversed, username) {
     try {
         const result = await model.generateContent(prompt);
         const text = result.response.text().trim();
-        readingCache.set(cacheKey, text); 
+        readingCache.set(cacheKey, text);
         return text;
     } catch (error) {
         console.error('⚠️ Gemini API Error (Tarot 1):', error.message);
@@ -460,12 +460,12 @@ async function getGeminiReading(cardName, isReversed, username) {
 
 async function getGeminiReading3(cards, username) {
     const jst = getJSTInfo();
-    const dateStr = jst.dateStr; 
+    const dateStr = jst.dateStr;
     const cacheKey = `tarot3-${dateStr}-${username}-${cards.map(c => c.name + c.isReversed).join('-')}`;
-    
+
     if (readingCache.has(cacheKey)) return readingCache.get(cacheKey);
 
-    const cardInfo = cards.map((c, i) => 
+    const cardInfo = cards.map((c, i) =>
         `${['過去', '現在', '未来'][i]}: ${c.name}(${c.isReversed ? '逆位置' : '正位置'})`
     ).join('、');
 
@@ -507,16 +507,16 @@ async function getCardImageBase64(imageFileName, isReversed) {
         return `data:image/webp;base64,${buffer.toString('base64')}`;
     } catch (error) {
         console.error('Base64画像生成エラー:', error.message);
-        return null; 
+        return null;
     }
 }
 
 //**********************************************************************************************ヒットアンドブロー********************************************************************************************** */
 
 function generateAnswer() {
-    const digits = ['0','1','2','3','4','5','6','7','8','9'];
+    const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
     let res = "";
-    for(let i=0; i<4; i++) {
+    for (let i = 0; i < 4; i++) {
         const idx = Math.floor(Math.random() * digits.length);
         res += digits.splice(idx, 1)[0];
     }
@@ -525,7 +525,7 @@ function generateAnswer() {
 
 function checkHitAndBlow(ans, gus) {
     let hit = 0, blow = 0;
-    for(let i=0; i<4; i++) {
+    for (let i = 0; i < 4; i++) {
         if (gus[i] === ans[i]) hit++;
         else if (ans.includes(gus[i])) blow++;
     }
@@ -561,7 +561,7 @@ function getMouseComment(code, rainProb, maxTemp) {
 async function getJokeImage(fileName) {
     const imagePath = path.resolve(__dirname, 'images', fileName);
     if (!fs.existsSync(imagePath)) {
-        console.log(`❌ ファイル不在: ${imagePath}`); 
+        console.log(`❌ ファイル不在: ${imagePath}`);
         return null;
     }
     try {
@@ -578,8 +578,8 @@ async function getJokeImage(fileName) {
 //*****************************************************************************************星座占い****************************************************************************************************** */
 // ✅ 修正後（星座占いはみんな共通だから、これだけでOKだちゅ！）
 function getDailyRandom(seedOffset = 0) {
-    const jst = getJSTInfo(); 
-    const dateNum = jst.seedDate; 
+    const jst = getJSTInfo();
+    const dateNum = jst.seedDate;
     // 💡 ユーザーIDは使わず、日付と星座の番号だけで固定の乱数を作るちゅ
     const finalSeed = dateNum + seedOffset;
     const x = Math.sin(finalSeed) * 10000;
@@ -590,12 +590,12 @@ function getDailyRandom(seedOffset = 0) {
 async function getGeminiFullHoroscope(rankingList) {
     const jst = getJSTInfo();
     const dateStr = jst.dateStr;
-    const cacheKey = `full-horoscope-${dateStr}`; 
-    
+    const cacheKey = `full-horoscope-${dateStr}`;
+
     if (readingCache.has(cacheKey)) return readingCache.get(cacheKey);
 
-    const rankingInfo = rankingList.map((item, i) => `${i+1}位:${item.name}`).join('、');
-    
+    const rankingInfo = rankingList.map((item, i) => `${i + 1}位:${item.name}`).join('、');
+
     const prompt = `占い師「ねずみ」として、以下の星座ランキング各々に50文字以内で短い一言コメントを、最後に「今日の全体の抱負」を300文字以内で作成して。
 リスト：${rankingInfo}
 形式：
@@ -626,10 +626,10 @@ async function getGeminiFullHoroscope(rankingList) {
 //****************************************************************************************ルーン占い***************************************************************************************************** */
 // 💡 修正：Geminiが失敗したらローカルLLMに回すハイブリッド版
 async function getGeminiRuneReading(runeName, isReversed, username) {
-    const jst = getJSTInfo(); 
-    const dateStr = jst.dateStr; 
+    const jst = getJSTInfo();
+    const dateStr = jst.dateStr;
     const cacheKey = `rune-${dateStr}-${username}-${runeName}-${isReversed}`;
-    
+
     if (readingCache.has(cacheKey)) return readingCache.get(cacheKey);
 
     const orientation = isReversed ? "逆位置" : "正位置";
@@ -641,7 +641,7 @@ async function getGeminiRuneReading(runeName, isReversed, username) {
         readingCache.set(cacheKey, text);
         return text;
     } catch (error) {
-        console.error('⚠️ Gemini API Error (Rune):', error.message); 
+        console.error('⚠️ Gemini API Error (Rune):', error.message);
         try {
             // 💡 ここでローカルAIにバトンタッチ！
             const localText = await callLocalLLM(prompt);
@@ -654,135 +654,135 @@ async function getGeminiRuneReading(runeName, isReversed, username) {
 }
 //******************************************************************************************寿司******************************************************************************************************* */
 const generateOaisoCanvas = async (game, state, extraMsg, displayImageName) => {
-        const canvasWidth = 600;
-        const dummyCanvas = createCanvas(1, 1);
-        const dummyCtx = dummyCanvas.getContext('2d');
+    const canvasWidth = 600;
+    const dummyCanvas = createCanvas(1, 1);
+    const dummyCtx = dummyCanvas.getContext('2d');
 
-        const orderText = game.orderedItems.length > 0 ? game.orderedItems.join('、') : 'まだ注文はないちゅ';
-        
-        // テキストの高さを事前計算
-        dummyCtx.font = '20px NotoSansJP';
-        const orderTextHeight = measureTextHeight(dummyCtx, orderText, canvasWidth - 120, 30);
+    const orderText = game.orderedItems.length > 0 ? game.orderedItems.join('、') : 'まだ注文はないちゅ';
 
-        dummyCtx.font = 'bold 22px NotoSansJP';
-        const msgHeight = extraMsg ? measureTextHeight(dummyCtx, extraMsg, canvasWidth - 120, 32) : 0;
+    // テキストの高さを事前計算
+    dummyCtx.font = '20px NotoSansJP';
+    const orderTextHeight = measureTextHeight(dummyCtx, orderText, canvasWidth - 120, 30);
 
-        // 💡 新規追加：画像の読み込みと高さ計算！
-        let img = null;
-        let imgDrawHeight = 0;
-        const imgContentWidth = 500; // 画像の横幅を500pxに固定
-        
-        if (displayImageName) {
-            const imagePath = path.join(__dirname, 'images', displayImageName);
-            if (fs.existsSync(imagePath)) {
-                img = await loadImage(imagePath);
-                const aspectRatio = img.width / img.height;
-                // アスペクト比を維持して高さを割り出すちゅ！
-                imgDrawHeight = imgContentWidth / Math.max(0.1, aspectRatio); 
-            }
+    dummyCtx.font = 'bold 22px NotoSansJP';
+    const msgHeight = extraMsg ? measureTextHeight(dummyCtx, extraMsg, canvasWidth - 120, 32) : 0;
+
+    // 💡 新規追加：画像の読み込みと高さ計算！
+    let img = null;
+    let imgDrawHeight = 0;
+    const imgContentWidth = 500; // 画像の横幅を500pxに固定
+
+    if (displayImageName) {
+        const imagePath = path.join(__dirname, 'images', displayImageName);
+        if (fs.existsSync(imagePath)) {
+            img = await loadImage(imagePath);
+            const aspectRatio = img.width / img.height;
+            // アスペクト比を維持して高さを割り出すちゅ！
+            imgDrawHeight = imgContentWidth / Math.max(0.1, aspectRatio);
         }
+    }
 
-        // 各パーツの高さ
-        const headerHeight = 100;
-        // 💡 画像があれば、画像の高さ＋上下の余白(40px)を足すちゅ
-        const imgSectionHeight = img ? (imgDrawHeight + 40) : 0; 
-        const infoBoxHeight = 140; 
-        const orderBoxHeight = 60 + orderTextHeight;
-        const msgBoxHeight = extraMsg ? 40 + msgHeight : 0;
-        const padding = 20;
+    // 各パーツの高さ
+    const headerHeight = 100;
+    // 💡 画像があれば、画像の高さ＋上下の余白(40px)を足すちゅ
+    const imgSectionHeight = img ? (imgDrawHeight + 40) : 0;
+    const infoBoxHeight = 140;
+    const orderBoxHeight = 60 + orderTextHeight;
+    const msgBoxHeight = extraMsg ? 40 + msgHeight : 0;
+    const padding = 20;
 
-        // 💡 全体のキャンバス高さを決定（画像スペース分だけ自動で縦に伸びるちゅ！）
-        const canvasHeight = headerHeight + imgSectionHeight + infoBoxHeight + padding + orderBoxHeight + padding + msgBoxHeight + padding + 40;
+    // 💡 全体のキャンバス高さを決定（画像スペース分だけ自動で縦に伸びるちゅ！）
+    const canvasHeight = headerHeight + imgSectionHeight + infoBoxHeight + padding + orderBoxHeight + padding + msgBoxHeight + padding + 40;
 
-        const canvas = createCanvas(canvasWidth, canvasHeight);
-        const ctx = canvas.getContext('2d');
+    const canvas = createCanvas(canvasWidth, canvasHeight);
+    const ctx = canvas.getContext('2d');
 
-        // 結果発表時の色（ピタリ賞:金, 惜しい:緑, 外れ:赤, プレイ中:木の色）
-        let mainColor = '#d4a373';
-        if (state === 'result') {
-            const diff = Math.abs(game.currentTotal - game.target);
-            if (diff === 0) mainColor = '#FFD700';
-            else if (diff <= 200) mainColor = '#00FA9A';
-            else mainColor = '#ff6b6b';
-        }
+    // 結果発表時の色（ピタリ賞:金, 惜しい:緑, 外れ:赤, プレイ中:木の色）
+    let mainColor = '#d4a373';
+    if (state === 'result') {
+        const diff = Math.abs(game.currentTotal - game.target);
+        if (diff === 0) mainColor = '#FFD700';
+        else if (diff <= 200) mainColor = '#00FA9A';
+        else mainColor = '#ff6b6b';
+    }
 
-        // 背景と枠線（お寿司屋さんの木目調）
-        ctx.fillStyle = '#2c221a'; 
-        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-        ctx.strokeStyle = mainColor;
-        ctx.lineWidth = 10;
-        ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
+    // 背景と枠線（お寿司屋さんの木目調）
+    ctx.fillStyle = '#2c221a';
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.strokeStyle = mainColor;
+    ctx.lineWidth = 10;
+    ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
 
-        // タイトル
-        ctx.textAlign = 'center';
-        ctx.font = 'bold 36px NotoSansJP';
-        ctx.fillStyle = mainColor;
-        ctx.fillText(state === 'result' ? 'おあいそ結果発表！！' : 'おあいそゲーム！', canvasWidth / 2, 60);
+    // タイトル
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 36px NotoSansJP';
+    ctx.fillStyle = mainColor;
+    ctx.fillText(state === 'result' ? 'おあいそ結果発表！！' : 'おあいそゲーム！', canvasWidth / 2, 60);
 
-        let currentY = headerHeight;
+    let currentY = headerHeight;
 
-        // 💡 0. 画像の描画（大将 または 寿司）
-        if (img) {
-            const imgX = (canvasWidth - imgContentWidth) / 2;
-            ctx.drawImage(img, imgX, currentY, imgContentWidth, imgDrawHeight);
-            // 写真風の白い枠線をつけるちゅ
-            ctx.strokeStyle = '#faedcd';
-            ctx.lineWidth = 4;
-            ctx.strokeRect(imgX, currentY, imgContentWidth, imgDrawHeight);
-            
-            // 次のパーツのためにY座標を進めるちゅ
-            currentY += imgDrawHeight + 40; 
-        }
+    // 💡 0. 画像の描画（大将 または 寿司）
+    if (img) {
+        const imgX = (canvasWidth - imgContentWidth) / 2;
+        ctx.drawImage(img, imgX, currentY, imgContentWidth, imgDrawHeight);
+        // 写真風の白い枠線をつけるちゅ
+        ctx.strokeStyle = '#faedcd';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(imgX, currentY, imgContentWidth, imgDrawHeight);
 
-        // ① 情報ボックス (目標金額と現在の合計)
+        // 次のパーツのためにY座標を進めるちゅ
+        currentY += imgDrawHeight + 40;
+    }
+
+    // ① 情報ボックス (目標金額と現在の合計)
+    ctx.fillStyle = '#3e2f23';
+    ctx.fillRect(40, currentY, canvasWidth - 80, infoBoxHeight);
+    ctx.strokeStyle = '#5a4535';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(40, currentY, canvasWidth - 80, infoBoxHeight);
+
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 26px NotoSansJP';
+    ctx.fillStyle = '#fefae0';
+    ctx.fillText(`目標金額: ${game.target}円`, canvasWidth / 2, currentY + 45);
+
+    ctx.font = 'bold 32px NotoSansJP';
+    ctx.fillStyle = state === 'result' ? mainColor : '#87CEEB';
+    ctx.fillText(`現在の合計: ${state === 'result' ? game.currentTotal : '？？？'} 円`, canvasWidth / 2, currentY + 100);
+
+    currentY += infoBoxHeight + padding;
+
+    // ② 注文履歴ボックス
+    ctx.fillStyle = '#3e2f23';
+    ctx.fillRect(40, currentY, canvasWidth - 80, orderBoxHeight);
+    ctx.strokeRect(40, currentY, canvasWidth - 80, orderBoxHeight);
+
+    ctx.textAlign = 'left';
+    ctx.font = 'bold 22px NotoSansJP';
+    ctx.fillStyle = '#d4a373';
+    ctx.fillText('注文履歴', 60, currentY + 40);
+
+    ctx.font = '20px NotoSansJP';
+    ctx.fillStyle = '#e0e0e0';
+    drawCanvasText(ctx, orderText, 60, currentY + 80, canvasWidth - 120, 30);
+
+    currentY += orderBoxHeight + padding;
+
+    // ③ メッセージボックス
+    if (extraMsg) {
         ctx.fillStyle = '#3e2f23';
-        ctx.fillRect(40, currentY, canvasWidth - 80, infoBoxHeight);
-        ctx.strokeStyle = '#5a4535';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(40, currentY, canvasWidth - 80, infoBoxHeight);
-
-        ctx.textAlign = 'center';
-        ctx.font = 'bold 26px NotoSansJP';
-        ctx.fillStyle = '#fefae0';
-        ctx.fillText(`目標金額: ${game.target}円`, canvasWidth / 2, currentY + 45);
-        
-        ctx.font = 'bold 32px NotoSansJP';
-        ctx.fillStyle = state === 'result' ? mainColor : '#87CEEB';
-        ctx.fillText(`現在の合計: ${state === 'result' ? game.currentTotal : '？？？'} 円`, canvasWidth / 2, currentY + 100);
-
-        currentY += infoBoxHeight + padding;
-
-        // ② 注文履歴ボックス
-        ctx.fillStyle = '#3e2f23';
-        ctx.fillRect(40, currentY, canvasWidth - 80, orderBoxHeight);
-        ctx.strokeRect(40, currentY, canvasWidth - 80, orderBoxHeight);
+        ctx.fillRect(40, currentY, canvasWidth - 80, msgBoxHeight);
+        ctx.strokeRect(40, currentY, canvasWidth - 80, msgBoxHeight);
 
         ctx.textAlign = 'left';
         ctx.font = 'bold 22px NotoSansJP';
-        ctx.fillStyle = '#d4a373';
-        ctx.fillText('注文履歴', 60, currentY + 40);
+        ctx.fillStyle = '#ffffff';
+        drawCanvasText(ctx, extraMsg, 60, currentY + 40, canvasWidth - 120, 32);
+    }
 
-        ctx.font = '20px NotoSansJP';
-        ctx.fillStyle = '#e0e0e0';
-        drawCanvasText(ctx, orderText, 60, currentY + 80, canvasWidth - 120, 30);
-
-        currentY += orderBoxHeight + padding;
-
-        // ③ メッセージボックス
-        if (extraMsg) {
-            ctx.fillStyle = '#3e2f23';
-            ctx.fillRect(40, currentY, canvasWidth - 80, msgBoxHeight);
-            ctx.strokeRect(40, currentY, canvasWidth - 80, msgBoxHeight);
-
-            ctx.textAlign = 'left';
-            ctx.font = 'bold 22px NotoSansJP';
-            ctx.fillStyle = '#ffffff';
-            drawCanvasText(ctx, extraMsg, 60, currentY + 40, canvasWidth - 120, 32);
-        }
-
-        return await canvas.encode('png');
-    };
-    // 💡 【追加】寿司の注文メニュー専用のCanvas画像生成魔法だちゅ！
+    return await canvas.encode('png');
+};
+// 💡 【追加】寿司の注文メニュー専用のCanvas画像生成魔法だちゅ！
 const generateSushiWelcomeCanvas = async () => {
     const canvasWidth = 800;
     const canvasHeight = 500;
@@ -790,7 +790,7 @@ const generateSushiWelcomeCanvas = async () => {
     const ctx = canvas.getContext('2d');
 
     // 背景と枠線（渋いブラウン）
-    ctx.fillStyle = '#3e2f23'; 
+    ctx.fillStyle = '#3e2f23';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     ctx.strokeStyle = '#faedcd';
     ctx.lineWidth = 10;
@@ -801,7 +801,7 @@ const generateSushiWelcomeCanvas = async () => {
     ctx.font = 'bold 40px NotoSansJP';
     ctx.fillStyle = '#ffffff';
     ctx.fillText('- ねずみ寿司へようこそ！ -', canvasWidth / 2, 70);
-    
+
     ctx.font = '24px NotoSansJP';
     ctx.fillText('ウチ自慢のネタを見てってちゅ！', canvasWidth / 2, 110);
 
@@ -834,7 +834,7 @@ const petDataFile = path.join(__dirname, 'pets.json');
 const petCatches = new Map();
 
 // 🌟 箱を作る宣言を【絶対に一番上】に書くちゅ！
-let userPets = {}; 
+let userPets = {};
 
 // 1. データの読み込み（箱を作ったあとに中身を入れる！）
 if (fs.existsSync(petDataFile)) {
@@ -858,7 +858,7 @@ for (const id in userPets) {
     if (pet.maxSp === undefined) { pet.maxSp = 15; needsSave = true; }
     if (pet.staggerMax === undefined) { pet.staggerMax = 20; needsSave = true; }
     // ランクがない新規ペットには、一旦すごく大きな数字を入れておくちゅ
-    if (!pet.rank) { pet.rank = 99999; needsSave = true; } 
+    if (!pet.rank) { pet.rank = 99999; needsSave = true; }
 }
 
 // 💡 修正：ランキングの空席を詰める処理！
@@ -889,138 +889,138 @@ function savePets() {
 // 【進化】最初の相棒候補（種族画像 image フィールドを追加したちゅ！）
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 const petSpecies = [
-    { 
-        name: 'カワウソ', emoji: '🦦', 
-baseHp: 30, baseAtk: 3, baseDef: 3, baseSpd: 3, maxSp: 3, staggerMax: 10, 
+    {
+        name: 'カワウソ', emoji: '🦦',
+        baseHp: 30, baseAtk: 3, baseDef: 3, baseSpd: 3, maxSp: 3, staggerMax: 10,
         desc: 'ネズミに倒される哀れな生き物だっちゅ。',
         growth: { hp: [1, 1], atk: [1, 1], def: [1, 1], spd: [1, 1], maxSp: [1, 1], staggerMax: [1, 1] },
         image: 'p_kawauso.jpg' // 【追加】カワウソの画像だちゅ！
     },
-    { 
-        name: 'ヒノネズミ', emoji: '🔥', 
-baseHp: 45, baseAtk: 7, baseDef: 3, baseSpd: 5, maxSp: 15, staggerMax: 20, 
+    {
+        name: 'ヒノネズミ', emoji: '🔥',
+        baseHp: 45, baseAtk: 7, baseDef: 3, baseSpd: 5, maxSp: 15, staggerMax: 20,
         desc: '燃える闘志を持ったバランス型。攻撃と素早さが安定して育つちゅ。',
         growth: { hp: [2, 4], atk: [1, 3], def: [0, 1], spd: [1, 2], maxSp: [0, 2], staggerMax: [1, 2] },
         image: 'p_hino.jpg' // 【追加】ヒノネズミの画像だちゅ！
     },
-    { 
-        name: 'ミズネズミ', emoji: '💧', 
-baseHp: 55, baseAtk: 4, baseDef: 5, baseSpd: 2, maxSp: 15, staggerMax: 25, 
+    {
+        name: 'ミズネズミ', emoji: '💧',
+        baseHp: 55, baseAtk: 4, baseDef: 5, baseSpd: 2, maxSp: 15, staggerMax: 25,
         desc: 'マイペースな要塞。HP・防御力・混乱耐性がグングン伸びる最強の壁役だちゅ。',
         growth: { hp: [3, 6], atk: [0, 2], def: [1, 3], spd: [0, 1], maxSp: [0, 1], staggerMax: [1, 3] },
         image: 'p_mizu.jpg' // 【追加】ミズネズミの画像だちゅ！
     },
-    { 
-        name: 'クサネズミ', emoji: '🌿', 
-baseHp: 50, baseAtk: 5, baseDef: 4, baseSpd: 4, maxSp: 20, staggerMax: 15, 
+    {
+        name: 'クサネズミ', emoji: '🌿',
+        baseHp: 50, baseAtk: 5, baseDef: 4, baseSpd: 4, maxSp: 20, staggerMax: 15,
         desc: '自然を愛する優しいねずみ。SP上限が圧倒的に伸びやすく、必殺技を狙いやすいちゅ。',
         growth: { hp: [2, 5], atk: [1, 2], def: [0, 2], spd: [0, 2], maxSp: [2, 4], staggerMax: [0, 2] },
         image: 'p_kusa.jpg' // 【追加】クサネズミの画像だちゅ！
     },
-    { 
-        name: 'エレキネズミ', emoji: '⚡', 
-baseHp: 35, baseAtk: 8, baseDef: 2, baseSpd: 7, maxSp: 10, staggerMax: 15, 
+    {
+        name: 'エレキネズミ', emoji: '⚡',
+        baseHp: 35, baseAtk: 8, baseDef: 2, baseSpd: 7, maxSp: 10, staggerMax: 15,
         desc: '超高速の紙装甲アタッカー。素早さと攻撃力は最強だけど、とっても打たれ弱いちゅ。',
         growth: { hp: [1, 3], atk: [2, 4], def: [0, 1], spd: [1, 3], maxSp: [0, 1], staggerMax: [0, 1] },
         image: 'p_eleki.jpg' // 【追加】エレキネズミの画像だちゅ！
     }
 ];
 // 💡 【超・軽量爆速版】ペットキャッチ専用のCanvas画像生成魔法だちゅ！
-    const generatePetCatchCanvas = async (pet, state, extraMsg) => {
-        const canvasWidth = 600;
-        const dummyCanvas = createCanvas(1, 1);
-        const dummyCtx = dummyCanvas.getContext('2d');
+const generatePetCatchCanvas = async (pet, state, extraMsg) => {
+    const canvasWidth = 600;
+    const dummyCanvas = createCanvas(1, 1);
+    const dummyCtx = dummyCanvas.getContext('2d');
 
-        // メッセージの高さを事前計算
-        dummyCtx.font = 'bold 22px NotoSansJP';
-        const msgHeight = extraMsg ? measureTextHeight(dummyCtx, extraMsg, canvasWidth - 120, 32) : 0;
+    // メッセージの高さを事前計算
+    dummyCtx.font = 'bold 22px NotoSansJP';
+    const msgHeight = extraMsg ? measureTextHeight(dummyCtx, extraMsg, canvasWidth - 120, 32) : 0;
 
-        // 画像の読み込みと高さ計算！
-        let img = null;
-        let imgDrawHeight = 0;
-        const imgContentWidth = 500;
-        
-        // 💡 修正：モンスターデータ(image)と写真データ(file)の両方に対応するちゅ！
-        const imageFileName = pet.image || pet.file; 
-        const imagePath = path.resolve(__dirname, 'images', imageFileName);
-        
-        if (fs.existsSync(imagePath)) {
-            img = await loadImage(imagePath);
-            const aspectRatio = img.width / img.height;
-            imgDrawHeight = imgContentWidth / Math.max(0.1, aspectRatio); 
-        } else {
-            imgDrawHeight = 300; // 画像がない時の仮の高さ
-        }
+    // 画像の読み込みと高さ計算！
+    let img = null;
+    let imgDrawHeight = 0;
+    const imgContentWidth = 500;
 
-        // 各パーツの高さ
-        const headerHeight = 100;
-        const imgSectionHeight = imgDrawHeight + 40; 
-        const msgBoxHeight = extraMsg ? 40 + msgHeight : 0;
-        const padding = 20;
+    // 💡 修正：モンスターデータ(image)と写真データ(file)の両方に対応するちゅ！
+    const imageFileName = pet.image || pet.file;
+    const imagePath = path.resolve(__dirname, 'images', imageFileName);
 
-        // 全体のキャンバス高さを決定
-        const canvasHeight = headerHeight + imgSectionHeight + msgBoxHeight + padding + 20;
+    if (fs.existsSync(imagePath)) {
+        img = await loadImage(imagePath);
+        const aspectRatio = img.width / img.height;
+        imgDrawHeight = imgContentWidth / Math.max(0.1, aspectRatio);
+    } else {
+        imgDrawHeight = 300; // 画像がない時の仮の高さ
+    }
 
-        const canvas = createCanvas(canvasWidth, canvasHeight);
-        const ctx = canvas.getContext('2d');
+    // 各パーツの高さ
+    const headerHeight = 100;
+    const imgSectionHeight = imgDrawHeight + 40;
+    const msgBoxHeight = extraMsg ? 40 + msgHeight : 0;
+    const padding = 20;
 
-        // テーマカラー（出現:草むらグリーン, 成功:ゴールド, 失敗:ブルーグレー）
-        let mainColor = '#32CD32'; 
-        if (state === 'success') mainColor = '#FFD700';
-        else if (state === 'fail') mainColor = '#607B8B';
+    // 全体のキャンバス高さを決定
+    const canvasHeight = headerHeight + imgSectionHeight + msgBoxHeight + padding + 20;
 
-        // 背景と枠線
-        ctx.fillStyle = '#1e1e24'; 
-        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    const canvas = createCanvas(canvasWidth, canvasHeight);
+    const ctx = canvas.getContext('2d');
+
+    // テーマカラー（出現:草むらグリーン, 成功:ゴールド, 失敗:ブルーグレー）
+    let mainColor = '#32CD32';
+    if (state === 'success') mainColor = '#FFD700';
+    else if (state === 'fail') mainColor = '#607B8B';
+
+    // 背景と枠線
+    ctx.fillStyle = '#1e1e24';
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+    ctx.strokeStyle = mainColor;
+    ctx.lineWidth = 10;
+    ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
+
+    // タイトル
+    ctx.textAlign = 'center';
+    ctx.font = 'bold 36px NotoSansJP';
+    ctx.fillStyle = mainColor;
+    let titleText = '';
+    if (state === 'appear') titleText = 'あっ！野生の仲間が飛び出してきた！';
+    else if (state === 'success') titleText = 'やったー！捕獲成功だちゅ！';
+    else titleText = 'あぁっ…逃げられちゃったちゅ…';
+    ctx.fillText(titleText, canvasWidth / 2, 60);
+
+    let currentY = headerHeight;
+
+    // ① 画像の描画
+    const imgX = (canvasWidth - imgContentWidth) / 2;
+    if (img) {
+        ctx.drawImage(img, imgX, currentY, imgContentWidth, imgDrawHeight);
+        // 写真風の白い枠線
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(imgX, currentY, imgContentWidth, imgDrawHeight);
+    } else {
+        ctx.fillStyle = '#333';
+        ctx.fillRect(imgX, currentY, imgContentWidth, imgDrawHeight);
+        ctx.fillStyle = '#fff';
+        ctx.fillText('画像なし', canvasWidth / 2, currentY + imgDrawHeight / 2);
+    }
+    currentY += imgSectionHeight;
+
+    // ② メッセージボックス
+    if (extraMsg) {
+        ctx.fillStyle = '#2b2d31';
+        ctx.fillRect(40, currentY, canvasWidth - 80, msgBoxHeight);
         ctx.strokeStyle = mainColor;
-        ctx.lineWidth = 10;
-        ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
+        ctx.lineWidth = 2;
+        ctx.strokeRect(40, currentY, canvasWidth - 80, msgBoxHeight);
 
-        // タイトル
-        ctx.textAlign = 'center';
-        ctx.font = 'bold 36px NotoSansJP';
-        ctx.fillStyle = mainColor;
-        let titleText = '';
-        if (state === 'appear') titleText = 'あっ！野生の仲間が飛び出してきた！';
-        else if (state === 'success') titleText = 'やったー！捕獲成功だちゅ！';
-        else titleText = 'あぁっ…逃げられちゃったちゅ…';
-        ctx.fillText(titleText, canvasWidth / 2, 60);
+        ctx.textAlign = 'left';
+        ctx.font = 'bold 24px NotoSansJP';
+        ctx.fillStyle = '#ffffff';
+        drawCanvasText(ctx, extraMsg, 60, currentY + 45, canvasWidth - 120, 32);
+    }
 
-        let currentY = headerHeight;
-
-        // ① 画像の描画
-        const imgX = (canvasWidth - imgContentWidth) / 2;
-        if (img) {
-            ctx.drawImage(img, imgX, currentY, imgContentWidth, imgDrawHeight);
-            // 写真風の白い枠線
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 4;
-            ctx.strokeRect(imgX, currentY, imgContentWidth, imgDrawHeight);
-        } else {
-            ctx.fillStyle = '#333';
-            ctx.fillRect(imgX, currentY, imgContentWidth, imgDrawHeight);
-            ctx.fillStyle = '#fff';
-            ctx.fillText('画像なし', canvasWidth / 2, currentY + imgDrawHeight / 2);
-        }
-        currentY += imgSectionHeight;
-
-        // ② メッセージボックス
-        if (extraMsg) {
-            ctx.fillStyle = '#2b2d31';
-            ctx.fillRect(40, currentY, canvasWidth - 80, msgBoxHeight);
-            ctx.strokeStyle = mainColor;
-            ctx.lineWidth = 2;
-            ctx.strokeRect(40, currentY, canvasWidth - 80, msgBoxHeight);
-
-            ctx.textAlign = 'left';
-            ctx.font = 'bold 24px NotoSansJP';
-            ctx.fillStyle = '#ffffff';
-            drawCanvasText(ctx, extraMsg, 60, currentY + 45, canvasWidth - 120, 32);
-        }
-
-        return await canvas.encode('png');
-    };
-    // 💡 【追加】ペットバトル専用のCanvas画像生成魔法だちゅ！
+    return await canvas.encode('png');
+};
+// 💡 【追加】ペットバトル専用のCanvas画像生成魔法だちゅ！
 const generatePetBattleCanvas = async (challenger, opponent, myState, oppState, log, turn) => {
     const canvasWidth = 800;
     const dummyCanvas = createCanvas(1, 1);
@@ -1058,12 +1058,12 @@ const generatePetBattleCanvas = async (challenger, opponent, myState, oppState, 
         const species = petSpecies.find(s => s.name === pet.name); //
         const imgPath = path.join(__dirname, 'images', species.image);
         const pWidth = 200;
-        
+
         if (fs.existsSync(imgPath)) {
             const img = await loadImage(imgPath);
             const ratio = img.width / img.height;
             const pHeight = pWidth / ratio;
-            
+
             ctx.save();
             if (isRight) {
                 // 右側の敵は左を向かせるために反転させるちゅ！
@@ -1086,7 +1086,7 @@ const generatePetBattleCanvas = async (challenger, opponent, myState, oppState, 
         ctx.fillRect(gaugeX, gaugeY, barW, 15);
         ctx.fillStyle = '#FF0000';
         ctx.fillRect(gaugeX, gaugeY, barW * (state.hp / pet.maxHp), 15);
-        
+
         // 混乱（Stagger）バー
         ctx.fillStyle = '#333';
         ctx.fillRect(gaugeX, gaugeY + 20, barW, 10);
@@ -1140,7 +1140,7 @@ const generatePetBattleResultCanvas = async (winnerPet, winnerUsername, rankMsg,
     // 💡 1. 文章の高さを正確に測るちゅ！
     dummyCtx.font = 'bold 22px NotoSansJP';
     const rankHeight = measureTextHeight(dummyCtx, safeRank, maxWidth, 32);
-    
+
     dummyCtx.font = 'italic 20px NotoSansJP';
     const commentHeight = measureTextHeight(dummyCtx, safeComment, maxWidth, 28);
 
@@ -1170,7 +1170,7 @@ const generatePetBattleResultCanvas = async (winnerPet, winnerUsername, rankMsg,
     // 背景と外枠
     ctx.fillStyle = '#1a1a1a';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-    ctx.strokeStyle = '#FFD700'; 
+    ctx.strokeStyle = '#FFD700';
     ctx.lineWidth = 12;
     ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
 
@@ -1232,7 +1232,7 @@ const generatePetRankingCanvas = async (sortedPets) => {
     const panelHeight = 90; // 1人あたりの高さ
     const panelGap = 15;
     const footerHeight = 60;
-    
+
     // 最大10位まで表示するちゅ
     const displayCount = Math.min(10, sortedPets.length);
     const canvasHeight = headerHeight + (panelHeight + panelGap) * displayCount + footerHeight;
@@ -1243,7 +1243,7 @@ const generatePetRankingCanvas = async (sortedPets) => {
     // 背景（高級感のあるダークグレーとゴールドの枠線）
     ctx.fillStyle = '#1a1a1a';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-    ctx.strokeStyle = '#FFD700'; 
+    ctx.strokeStyle = '#FFD700';
     ctx.lineWidth = 10;
     ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
 
@@ -1252,7 +1252,7 @@ const generatePetRankingCanvas = async (sortedPets) => {
     ctx.font = 'bold 40px NotoSansJP';
     ctx.fillStyle = '#FFD700';
     ctx.fillText('🏆 ペットバトル 殿堂入りランキング 🏆', canvasWidth / 2, 70);
-    
+
     ctx.font = '20px NotoSansJP';
     ctx.fillStyle = '#e0e0e0';
     ctx.fillText('最強のテイマーたちの記録だちゅ！', canvasWidth / 2, 110);
@@ -1289,11 +1289,11 @@ const generatePetRankingCanvas = async (sortedPets) => {
         // ペット名とテイマー名
         const safePetName = stripEmoji(pet.name);
         const userName = pet.userName || '不明なテイマー';
-        
+
         ctx.font = 'bold 24px NotoSansJP';
         ctx.fillStyle = '#ffffff';
         ctx.fillText(safePetName, startX + 120, currentY + 40);
-        
+
         ctx.font = '18px NotoSansJP';
         ctx.fillStyle = '#aaa';
         ctx.fillText(`テイマー: ${userName} (Lv.${pet.level})`, startX + 120, currentY + 70);
@@ -1323,7 +1323,7 @@ const generatePetReleaseCanvas = async (pet, username) => {
 
     const stripEmoji = (str) => str.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '').replace(/[\u2600-\u27BF]/g, '').trim();
     const safePetName = stripEmoji(pet.name);
-    
+
     const releaseMsg = `Lv.${pet.level}まで一緒に過ごした ${safePetName} を自然に還したちゅ。\n今まで本当にありがとう、元気でね…！`;
     const safeMsg = stripEmoji(releaseMsg);
 
@@ -1398,9 +1398,9 @@ const generatePetReleaseCanvas = async (pet, username) => {
 };
 //**************************************************************************************心の天気図（気分記録）******************************************************************************************** */
 const kibunDataFile = path.join(__dirname, 'kibun.json');
-let userKibun = {}; 
+let userKibun = {};
 if (fs.existsSync(kibunDataFile)) {
-    try { userKibun = JSON.parse(fs.readFileSync(kibunDataFile, 'utf8')); } 
+    try { userKibun = JSON.parse(fs.readFileSync(kibunDataFile, 'utf8')); }
     catch (e) { console.error('気分データの読み込みに失敗したちゅ:', e); }
 }
 function saveKibun() {
@@ -1409,9 +1409,9 @@ function saveKibun() {
 
 // レポートを送信するチャンネルを記憶するノート
 const kibunSettingsFile = path.join(__dirname, 'kibun_settings.json');
-let kibunSettings = {}; 
+let kibunSettings = {};
 if (fs.existsSync(kibunSettingsFile)) {
-    try { kibunSettings = JSON.parse(fs.readFileSync(kibunSettingsFile, 'utf8')); } 
+    try { kibunSettings = JSON.parse(fs.readFileSync(kibunSettingsFile, 'utf8')); }
     catch (e) { console.error('気分設定の読み込みに失敗したちゅ:', e); }
 }
 function saveKibunSettings() {
@@ -1425,8 +1425,8 @@ client.once('clientReady', async (c) => {
     // 💡 統合コマンドと、裏機能(気分記録)だけにするちゅ！
     const data = [
         // 💡 統合コマンドと、裏機能(気分記録)
-        { 
-            name: 'nezumi', 
+        {
+            name: 'nezumi',
             description: 'ねずみの機能（占い・ゲーム・相棒など）を使う総合メニューを開くちゅ！',
             options: [
                 {
@@ -1472,7 +1472,7 @@ client.once('clientReady', async (c) => {
         },
     ]; // ⬅️ ここがコマンドリストの終わり
 
-    const guildIds = ['1450709451488100396','1483795902610145463', '1480458980655366188']; 
+    const guildIds = ['1450709451488100396', '1483795902610145463', '1480458980655366188'];
     await client.application.commands.set([]); // グローバルコマンドをリセット
 
     for (const id of guildIds) {
@@ -1491,12 +1491,12 @@ client.once('clientReady', async (c) => {
     cron.schedule('0 22 * * 0', async () => {
         console.log('🗺️ 心の天気図レポートの送信を開始するちゅ...');
         const now = Date.now();
-        const oneWeekAgo = now - (7 * 24 * 60 * 60 * 1000); 
+        const oneWeekAgo = now - (7 * 24 * 60 * 60 * 1000);
         const emojis = { 5: '✨', 4: '☀️', 3: '☁️', 2: '🌧️', 1: '⚡' };
 
         for (const userId in userKibun) {
             const recentRecords = userKibun[userId].filter(r => r.date >= oneWeekAgo);
-            if (recentRecords.length === 0) continue; 
+            if (recentRecords.length === 0) continue;
 
             // 💡 ユーザー個人の送信先設定を探す
             const channelId = kibunSettings[userId];
@@ -1508,22 +1508,22 @@ client.once('clientReady', async (c) => {
             recentRecords.forEach(r => {
                 totalLevel += r.level;
                 const d = new Date(r.date);
-                const jstD = new Date(d.getTime() + (9 * 60 * 60 * 1000)); 
+                const jstD = new Date(d.getTime() + (9 * 60 * 60 * 1000));
                 const dateStr = `${jstD.getUTCMonth() + 1}/${jstD.getUTCDate()} ${jstD.getUTCHours()}:${jstD.getUTCMinutes().toString().padStart(2, '0')}`;
-                
+
                 reportText += `・${dateStr} | ${emojis[r.level]} Lv.${r.level} ${r.memo ? `(*${r.memo}*)` : ''}\n`;
             });
 
             const avgLevel = (totalLevel / recentRecords.length).toFixed(1);
-            
+
             let userName = "不明なユーザー";
             try {
                 const user = await client.users.fetch(userId);
                 userName = user.username;
-            } catch(e) {}
+            } catch (e) { }
 
             const embed = new EmbedBuilder()
-                .setColor(0x9370DB) 
+                .setColor(0x9370DB)
                 .setTitle(`🗺️ ${userName} の今週の心の天気図だちゅ！`)
                 .setDescription(`今週は **${recentRecords.length}回** 気分を記録してくれたちゅ！\n今週の平均気分レベル: **${avgLevel}**\n\n**【記録まとめ】**\n${reportText.length > 3000 ? "（記録が多すぎるので少し省略するちゅ…！）\n" + reportText.slice(-3000) : reportText}`)
                 .setFooter({ text: '来週もマイペースに、無理せず過ごしてちゅ！🍵' });
@@ -1538,7 +1538,7 @@ client.once('clientReady', async (c) => {
             }
         }
     }, {
-        timezone: "Asia/Tokyo" 
+        timezone: "Asia/Tokyo"
     });
 });
 
@@ -1633,8 +1633,8 @@ client.on('interactionCreate', async (interaction) => {
     // ==========================================================
     else if (interaction.isButton() && (interaction.customId === 'btn_weather' || interaction.customId === 'btn_hitandblow')) {
         // ※モーダルを開く時は deferUpdate() をしちゃダメだちゅ！
-        const { ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js'); 
-        
+        const { ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+
         if (interaction.customId === 'btn_weather') {
             const modal = new ModalBuilder().setCustomId('modal_weather').setTitle('一週間天気予報');
             const input = new TextInputBuilder()
@@ -1644,11 +1644,11 @@ client.on('interactionCreate', async (interaction) => {
                 .setStyle(TextInputStyle.Short)
                 .setRequired(true);
             modal.addComponents(new ActionRowBuilder().addComponents(input));
-            
+
             await interaction.showModal(modal);
             // 💡 【追加】モーダルを開いた直後、元のメッセージのボタンを消すちゅ！
-            try { await interaction.message.edit({ components: [] }); } catch(e) {}
-            
+            try { await interaction.message.edit({ components: [] }); } catch (e) { }
+
         } else if (interaction.customId === 'btn_hitandblow') {
             const modal = new ModalBuilder().setCustomId('modal_hitandblow').setTitle('ヒット＆ブロー');
             const input = new TextInputBuilder()
@@ -1659,10 +1659,10 @@ client.on('interactionCreate', async (interaction) => {
                 .setMinLength(4).setMaxLength(4)
                 .setRequired(true);
             modal.addComponents(new ActionRowBuilder().addComponents(input));
-            
+
             await interaction.showModal(modal);
             // 💡 【追加】モーダルを開いた直後、元のメッセージのボタンを消すちゅ！
-            try { await interaction.message.edit({ components: [] }); } catch(e) {}
+            try { await interaction.message.edit({ components: [] }); } catch (e) { }
         }
     }
 
@@ -1684,7 +1684,7 @@ client.on('interactionCreate', async (interaction) => {
         );
         await interaction.update({ content: '相棒の特訓コースを選んでちゅ！', components: [row] });
     }
-    
+
     else if (interaction.isButton() && interaction.customId === 'btn_pet_battle_menu') {
         // Discordの「ユーザー選択メニュー」を使うちゅ！
         const { UserSelectMenuBuilder } = require('discord.js');
@@ -1701,32 +1701,32 @@ client.on('interactionCreate', async (interaction) => {
     // ==========================================================
     // (これ以降の処理は、元の処理と同じように deferUpdate() してから editReply() して画像を上書きするちゅ！)
     // ここに引っかかったら、まずはローディング状態にするちゅ
-        if (interaction.isButton() || interaction.isModalSubmit() || interaction.isStringSelectMenu() || interaction.isUserSelectMenu()) {
-            
-            // 例外処理：おあいそゲームの中のボタン・メニューは deferUpdate 済みなのでスキップ
-            if (interaction.customId !== 'sushi_select_order' && interaction.customId !== 'oaiso_add_item' && interaction.customId !== 'oaiso_bill_please' && !interaction.customId.startsWith('btn_atk') && !interaction.customId.startsWith('btn_def') && !interaction.customId.startsWith('btn_sp') && !interaction.customId.startsWith('btn_special') && interaction.customId !== 'catch_attempt' && interaction.customId !== 'catch_ignore' && interaction.customId !== 'kibun_select_channel' && interaction.customId !== 'correct_nezumi' && interaction.customId !== 'incorrect_nezumi') {
-                try { 
-                    if (interaction.isModalSubmit()) {
-                        // 💡 【修正】臨時看板(startsWith)も「自分だけに見える」に仲間入りさせるちゅ！
-                        if (interaction.customId && (interaction.customId.startsWith('modal_event_') || interaction.customId.startsWith('modal_temp_setup'))) {
-                            // 💡 【修正】古い ephemeral: true ではなく、新しい flags を使うちゅ！
-                            await interaction.deferReply({ flags: MessageFlags.Ephemeral });
-                        } else {
-                            // 他のゲームや天気のモーダルは設定を引き継ぐちゅ
-                            await interaction.deferReply({ flags: currentFlags });
-                        }
-                    } else {
-                        await interaction.deferUpdate(); 
-                        await interaction.editReply({ components: [] });
-                    }
-                } catch(e) {} 
-            }
-        }
+    if (interaction.isButton() || interaction.isModalSubmit() || interaction.isStringSelectMenu() || interaction.isUserSelectMenu()) {
 
-        
-        // 🔮 タロット (btn_tarot)
-        if (interaction.customId === 'btn_tarot') {
-            await interaction.editReply({ content: '🌌 星の導きを読み解きながら、今日の1枚を描いているちゅ…！🐭🎨' });
+        // 例外処理：おあいそゲームの中のボタン・メニューは deferUpdate 済みなのでスキップ
+        if (interaction.customId !== 'sushi_select_order' && interaction.customId !== 'oaiso_add_item' && interaction.customId !== 'oaiso_bill_please' && !interaction.customId.startsWith('btn_atk') && !interaction.customId.startsWith('btn_def') && !interaction.customId.startsWith('btn_sp') && !interaction.customId.startsWith('btn_special') && interaction.customId !== 'catch_attempt' && interaction.customId !== 'catch_ignore' && interaction.customId !== 'kibun_select_channel' && interaction.customId !== 'correct_nezumi' && interaction.customId !== 'incorrect_nezumi') {
+            try {
+                if (interaction.isModalSubmit()) {
+                    // 💡 【修正】臨時看板(startsWith)も「自分だけに見える」に仲間入りさせるちゅ！
+                    if (interaction.customId && (interaction.customId.startsWith('modal_event_') || interaction.customId.startsWith('modal_temp_setup'))) {
+                        // 💡 【修正】古い ephemeral: true ではなく、新しい flags を使うちゅ！
+                        await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+                    } else {
+                        // 他のゲームや天気のモーダルは設定を引き継ぐちゅ
+                        await interaction.deferReply({ flags: currentFlags });
+                    }
+                } else {
+                    await interaction.deferUpdate();
+                    await interaction.editReply({ components: [] });
+                }
+            } catch (e) { }
+        }
+    }
+
+
+    // 🔮 タロット (btn_tarot)
+    if (interaction.customId === 'btn_tarot') {
+        await interaction.editReply({ content: '🌌 星の導きを読み解きながら、今日の1枚を描いているちゅ…！🐭🎨' });
 
         const personalSeed = getPersonalDailyRandom(interaction.user.id);
         const cardIndex = Math.floor(personalSeed * tarotCards.length);
@@ -1747,7 +1747,7 @@ client.on('interactionCreate', async (interaction) => {
             let drawHeight = 430; // 仮の高さ
             let img = null;
             const imagePath = path.join(__dirname, 'images', selectedCard.image);
-            
+
             if (fs.existsSync(imagePath)) {
                 img = await loadImage(imagePath);
                 const aspectRatio = img.width / img.height;
@@ -1757,7 +1757,7 @@ client.on('interactionCreate', async (interaction) => {
             // AIの文章を待つちゅ
             const geminiExplanation = await geminiPromise;
             const finalExplanation = geminiExplanation || "運命の糸が絡まってうまく読めなかったちゅ…。";
-            
+
             // 安全なテキストに変換
             const safeExp = stripEmoji(finalExplanation);
             const safeWhisper = stripEmoji(mouseWhisper);
@@ -1767,13 +1767,13 @@ client.on('interactionCreate', async (interaction) => {
             const dummyCanvas = createCanvas(1, 1);
             const dummyCtx = dummyCanvas.getContext('2d');
             const maxTextWidth = 600 - 120; // 左右の余白を引いたテキストエリアの幅
-            
+
             dummyCtx.font = '18px NotoSansJP';
             const meaningHeight = measureTextHeight(dummyCtx, safeMeaning, maxTextWidth, 26);
-            
+
             dummyCtx.font = 'italic 18px NotoSansJP';
             const whisperHeight = measureTextHeight(dummyCtx, safeWhisper, maxTextWidth, 26);
-            
+
             dummyCtx.font = '18px NotoSansJP';
             const expHeight = measureTextHeight(dummyCtx, safeExp, maxTextWidth, 26);
 
@@ -1786,10 +1786,10 @@ client.on('interactionCreate', async (interaction) => {
             // レイアウトの基準位置（Y座標）
             const cardAreaTop = 110;
             const textYStart = cardAreaTop + drawHeight + 35;
-            const boxStartY = textYStart + 60; 
-            
+            const boxStartY = textYStart + 60;
+
             const canvasWidth = 600; // 1枚引きだからスリムにするちゅ！
-            const canvasHeight = boxStartY + boxHeight + 50; 
+            const canvasHeight = boxStartY + boxHeight + 50;
 
             // 💡 3. ピッタリサイズのキャンバスを作って描画スタート！
             const canvas = createCanvas(canvasWidth, canvasHeight);
@@ -1841,7 +1841,7 @@ client.on('interactionCreate', async (interaction) => {
             ctx.strokeRect(40, boxStartY, canvasWidth - 80, boxHeight);
 
             // 💡 解説テキストの描画
-            let textY = boxStartY + 45; 
+            let textY = boxStartY + 45;
             const textX = 60;
 
             // ① カードの意味
@@ -1853,9 +1853,9 @@ client.on('interactionCreate', async (interaction) => {
             ctx.font = '18px NotoSansJP';
             ctx.fillStyle = '#e0e0e0';
             textY = drawCanvasText(ctx, safeMeaning, textX, textY, maxTextWidth, 26);
-            
+
             textY += 25;
-            
+
             // ② ねずみのささやき
             ctx.font = 'bold 22px NotoSansJP';
             ctx.fillStyle = '#00FA9A';
@@ -1892,14 +1892,14 @@ client.on('interactionCreate', async (interaction) => {
             console.error('Canvas描画エラー(tarot1):', error);
             await interaction.editReply({ content: '絵を描く途中で筆が折れちゃったちゅ…。ログを確認してちゅ💦' });
         }
-        }
-        
-        // 🔮 タロット3枚 (btn_tarot3)
-        else if (interaction.customId === 'btn_tarot3') {
-            await interaction.editReply({ content: '🌌 星の導きを読み解きながら、1枚の絵を描いているちゅ…！🐭🎨' });
+    }
+
+    // 🔮 タロット3枚 (btn_tarot3)
+    else if (interaction.customId === 'btn_tarot3') {
+        await interaction.editReply({ content: '🌌 星の導きを読み解きながら、1枚の絵を描いているちゅ…！🐭🎨' });
 
         const positions = ['過去', '現在', '未来'];
-        const drawnResults = []; 
+        const drawnResults = [];
         let tempDeck = [...tarotCards];
 
         for (let i = 0; i < 3; i++) {
@@ -1915,7 +1915,7 @@ client.on('interactionCreate', async (interaction) => {
 
         const geminiPromise = getGeminiReading3(drawnResults, interaction.user.username);
         const storyResult = generateTarotStory(drawnResults[0], drawnResults[1], drawnResults[2]);
-        
+
         // 絵文字を取り除く魔法
         const stripEmoji = (str) => str.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '').replace(/[\u2600-\u27BF]/g, '');
 
@@ -1948,10 +1948,10 @@ client.on('interactionCreate', async (interaction) => {
             // 💡 2. 文章の高さを測って、全体のキャンバスサイズをピッタリ決めるちゅ！
             const dummyCanvas = createCanvas(1, 1);
             const dummyCtx = dummyCanvas.getContext('2d');
-            
+
             dummyCtx.font = 'italic 18px NotoSansJP';
             const storyHeight = measureTextHeight(dummyCtx, storyResult.message, 840 - 120, 26);
-            
+
             dummyCtx.font = '18px NotoSansJP';
             const expHeight = measureTextHeight(dummyCtx, safeExp, 840 - 120, 26);
 
@@ -1963,7 +1963,7 @@ client.on('interactionCreate', async (interaction) => {
             // カードの開始位置と、解説枠の開始位置
             const cardAreaTop = 140;
             const boxStartY = cardAreaTop + maxDrawHeight + 90; // 💡 カードの高さに合わせて枠を上に詰めるちゅ！
-            
+
             const canvasWidth = 840;
             const canvasHeight = boxStartY + boxHeight + 50; // 余白を足して最終的なキャンバスサイズを決定！
 
@@ -2000,12 +2000,12 @@ client.on('interactionCreate', async (interaction) => {
                 if (img) {
                     const aspectRatio = img.width / img.height;
                     const drawHeight = cardWidth / aspectRatio;
-                    
+
                     ctx.save();
                     // 💡 画像の中心を「一番高いカードの中央」に合わせることで、ガタガタにならないようにするちゅ！
                     const yOffset = (maxDrawHeight - drawHeight) / 2;
                     ctx.translate(cx + cardWidth / 2, cardAreaTop + yOffset + drawHeight / 2);
-                    if (result.isReversed) ctx.rotate(Math.PI); 
+                    if (result.isReversed) ctx.rotate(Math.PI);
                     ctx.drawImage(img, -cardWidth / 2, -drawHeight / 2, cardWidth, drawHeight);
                     ctx.restore();
                 } else {
@@ -2071,11 +2071,11 @@ client.on('interactionCreate', async (interaction) => {
             console.error('Canvas描画エラー:', error);
             await interaction.editReply({ content: '絵を描く途中で筆が折れちゃったちゅ…。ログを確認してちゅ💦' });
         }
-        }
-        
-        // 🔮 星座占い (btn_horoscope)
-        else if (interaction.customId === 'btn_horoscope') {
-            await interaction.editReply({ content: '🌌 星座の瞬きを読み解いて、占いボードを描いているちゅ…！🐭🎨' });
+    }
+
+    // 🔮 星座占い (btn_horoscope)
+    else if (interaction.customId === 'btn_horoscope') {
+        await interaction.editReply({ content: '🌌 星座の瞬きを読み解いて、占いボードを描いているちゅ…！🐭🎨' });
 
         const ranking = signs.map((name, index) => {
             const score = Math.floor(getDailyRandom(index) * 100) + 1;
@@ -2086,19 +2086,19 @@ client.on('interactionCreate', async (interaction) => {
 
         const fullMessage = await getGeminiFullHoroscope(ranking);
         const lines = fullMessage.split('\n');
-        
+
         // 💡 修正：抱負が空欄になるのを防ぐ、完璧な読み取り魔法だちゅ！
         let rawHoufu = "楽しく過ごそうちゅ！";
         const houfuIndex = lines.findIndex(l => l.includes('抱負'));
         if (houfuIndex !== -1) {
             const parts = lines[houfuIndex].split(/[：:]/);
             let extracted = parts.slice(1).join(':').trim(); // コロン以降を取得（スペースは取り除く）
-            
+
             // 「抱負：」の後に改行して次の行に書かれている場合の対策
             if (extracted === '' && lines.length > houfuIndex + 1) {
                 extracted = lines.slice(houfuIndex + 1).join(' ').trim();
             }
-            
+
             if (extracted !== '') {
                 rawHoufu = extracted.replace(/\*/g, '');
             }
@@ -2106,9 +2106,9 @@ client.on('interactionCreate', async (interaction) => {
 
         // 絵文字を取り除く魔法（Canvasの文字化け防止！）
         const stripEmoji = (str) => str.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '').replace(/[\u2600-\u27BF]/g, '').trim();
-        
+
         let safeHoufu = stripEmoji(rawHoufu);
-        
+
         // 💡 安全装置：絵文字だけで消えちゃったり、取得失敗した時はデフォルトの言葉を入れるちゅ！
         if (!safeHoufu || safeHoufu === '') {
             safeHoufu = "今日も1日、自分のペースで楽しく過ごそうちゅ！";
@@ -2118,34 +2118,34 @@ client.on('interactionCreate', async (interaction) => {
             const canvasWidth = 800;
             const dummyCanvas = createCanvas(1, 1);
             const dummyCtx = dummyCanvas.getContext('2d');
-            
+
             // 抱負の高さ計算
             dummyCtx.font = 'italic 20px NotoSansJP';
             const houfuHeight = measureTextHeight(dummyCtx, safeHoufu, canvasWidth - 120, 28);
-            
-            const headerHeight = 180 + houfuHeight; 
-            
+
+            const headerHeight = 180 + houfuHeight;
+
             const panelsData = [];
             let totalPanelsHeight = 0;
             const panelPadding = 20;
 
             for (let i = 0; i < ranking.length; i++) {
                 const item = ranking[i];
-                
-                const targetLine = lines.find(l => l.includes(`${i+1}位`));
+
+                const targetLine = lines.find(l => l.includes(`${i + 1}位`));
                 let comment = "";
                 if (targetLine) {
                     const parts = targetLine.split(/[：:]/);
                     if (parts.length > 1) {
                         comment = parts.slice(1).join(':').replace(/\*/g, '').trim();
                     } else {
-                        comment = targetLine.replace(new RegExp(`.*${i+1}位.*`), '').replace(/\*/g, '').trim();
+                        comment = targetLine.replace(new RegExp(`.*${i + 1}位.*`), '').replace(/\*/g, '').trim();
                     }
                 }
                 comment = comment.replace(new RegExp(`${item.name}[:：]?`), '').trim();
-                
+
                 let safeComment = stripEmoji(comment);
-                
+
                 // 💡 各星座のコメントも空欄にならないように安全装置を追加だちゅ！
                 if (!safeComment || safeComment === '') {
                     safeComment = "今日はきっといいことがあるちゅ！応援してるちゅ！";
@@ -2154,11 +2154,11 @@ client.on('interactionCreate', async (interaction) => {
                 dummyCtx.font = '18px NotoSansJP';
                 const commentWidth = canvasWidth - 120;
                 const commentHeight = measureTextHeight(dummyCtx, safeComment, commentWidth, 26);
-                
+
                 const isTop3 = i < 3;
                 const extraHeight = isTop3 ? 30 : 0;
                 const panelHeight = 40 + commentHeight + extraHeight + panelPadding * 2;
-                
+
                 panelsData.push({
                     rankNum: i + 1,
                     name: item.name,
@@ -2168,7 +2168,7 @@ client.on('interactionCreate', async (interaction) => {
                     panelHeight,
                     isTop3
                 });
-                
+
                 totalPanelsHeight += panelHeight + 15;
             }
 
@@ -2201,7 +2201,7 @@ client.on('interactionCreate', async (interaction) => {
             ctx.font = 'bold 22px NotoSansJP';
             ctx.fillStyle = '#FFD700';
             ctx.fillText('今日の抱負', canvasWidth / 2, 125);
-            
+
             ctx.textAlign = 'left';
             ctx.font = 'italic 20px NotoSansJP';
             ctx.fillStyle = '#ffffff';
@@ -2214,7 +2214,7 @@ client.on('interactionCreate', async (interaction) => {
 
             for (let i = 0; i < panelsData.length; i++) {
                 const day = panelsData[i];
-                
+
                 // パネルの背景色と枠線 (1位:金, 2位:銀, 3位:銅, 4位以下:グレー)
                 ctx.fillStyle = i === 0 ? '#3a3515' : i === 1 ? '#2a2a2a' : i === 2 ? '#362210' : '#2b2d31';
                 ctx.fillRect(startX, currentY, panelWidth, day.panelHeight);
@@ -2226,7 +2226,7 @@ client.on('interactionCreate', async (interaction) => {
                 ctx.textAlign = 'left';
                 ctx.font = 'bold 24px NotoSansJP';
                 ctx.fillStyle = i === 0 ? '#FFD700' : i === 1 ? '#C0C0C0' : i === 2 ? '#CD7F32' : '#87CEEB';
-                
+
                 const scoreText = day.isTop3 ? ` (${day.score}点)` : '';
                 ctx.fillText(`第${day.rankNum}位 : ${day.name}${scoreText}`, startX + 20, currentY + 35);
 
@@ -2261,11 +2261,11 @@ client.on('interactionCreate', async (interaction) => {
             console.error('Canvas星座占いエラー:', error);
             await interaction.editReply({ content: '星の軌道を計算中に、望遠鏡が壊れちゃったちゅ…。' });
         }
-        }
-        
-        // 🔮 ルーン占い (btn_rune)
-        else if (interaction.customId === 'btn_rune') {
-            await interaction.editReply({ content: '🌌 石に刻まれた古代の文字を読み解いて、1枚の絵にしているちゅ…！🐭🎨' });
+    }
+
+    // 🔮 ルーン占い (btn_rune)
+    else if (interaction.customId === 'btn_rune') {
+        await interaction.editReply({ content: '🌌 石に刻まれた古代の文字を読み解いて、1枚の絵にしているちゅ…！🐭🎨' });
 
         const personalSeed = getPersonalDailyRandom(interaction.user.id, 777);
         const runeIndex = Math.floor(personalSeed * runeAlphabet.length);
@@ -2284,10 +2284,10 @@ client.on('interactionCreate', async (interaction) => {
         try {
             // 💡 1. ルーン画像を読み込み、アスペクト比を計算するちゅ！
             const cardWidth = 250;
-            let drawHeight = 250; 
+            let drawHeight = 250;
             let img = null;
             const imagePath = path.join(__dirname, 'images', selectedRune.image);
-            
+
             if (fs.existsSync(imagePath)) {
                 img = await loadImage(imagePath);
                 const aspectRatio = img.width / img.height;
@@ -2297,9 +2297,9 @@ client.on('interactionCreate', async (interaction) => {
             // AIの文章を待つちゅ
             const geminiExplanation = await geminiPromise;
             const finalExplanation = geminiExplanation || "石の言葉がうまく読み取れなかったちゅ…。";
-            
+
             // 安全なテキストに変換
-            const safeSymbol = selectedRune.symbol; 
+            const safeSymbol = selectedRune.symbol;
             const safeMeaning = stripEmoji(selectedRune.meaning);
             const safeStoneMeaning = stripEmoji(isReversed ? selectedRune.reversed : selectedRune.upright);
             const safeExp = stripEmoji(finalExplanation);
@@ -2307,8 +2307,8 @@ client.on('interactionCreate', async (interaction) => {
             // 💡 2. 文章の高さを測って、キャンバスの縦幅を決めるちゅ！
             const dummyCanvas = createCanvas(1, 1);
             const dummyCtx = dummyCanvas.getContext('2d');
-            const maxTextWidth = 600 - 120; 
-            
+            const maxTextWidth = 600 - 120;
+
             dummyCtx.font = '18px NotoSansJP';
             const meaningHeight = measureTextHeight(dummyCtx, safeStoneMeaning, maxTextWidth, 26);
             const expHeight = measureTextHeight(dummyCtx, safeExp, maxTextWidth, 26);
@@ -2317,7 +2317,7 @@ client.on('interactionCreate', async (interaction) => {
             const symbolTitleHeight = 24 + 15 + 26; // 象徴タイトル + 余白 + 中身
             const meaningSectionHeight = 24 + 15 + meaningHeight;
             const expSectionHeight = 24 + 15 + expHeight;
-            
+
             const boxContentHeight = symbolTitleHeight + 25 + meaningSectionHeight + 25 + expSectionHeight;
             const boxPadding = 40;
             const boxHeight = boxContentHeight + boxPadding * 2;
@@ -2325,10 +2325,10 @@ client.on('interactionCreate', async (interaction) => {
             // レイアウトの基準位置（Y座標）
             const cardAreaTop = 110;
             const textYStart = cardAreaTop + drawHeight + 35;
-            const boxStartY = textYStart + 60; 
-            
-            const canvasWidth = 600; 
-            const canvasHeight = boxStartY + boxHeight + 50; 
+            const boxStartY = textYStart + 60;
+
+            const canvasWidth = 600;
+            const canvasHeight = boxStartY + boxHeight + 50;
 
             // 💡 3. ピッタリサイズのキャンバスを作って描画スタート！
             const canvas = createCanvas(canvasWidth, canvasHeight);
@@ -2337,14 +2337,14 @@ client.on('interactionCreate', async (interaction) => {
             // 背景と枠線（古代の石板をイメージしたブラウン系）
             ctx.fillStyle = '#1e1e24';
             ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-            ctx.strokeStyle = '#8B4513'; 
+            ctx.strokeStyle = '#8B4513';
             ctx.lineWidth = 10;
             ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
 
             // タイトル
             ctx.textAlign = 'center';
             ctx.font = 'bold 32px NotoSansJP';
-            ctx.fillStyle = '#FFD700'; 
+            ctx.fillStyle = '#FFD700';
             ctx.fillText(`今日のルーン：${safeSymbol} ${selectedRune.name}`, canvasWidth / 2, 60);
 
             // 💡 石の画像の描画
@@ -2380,7 +2380,7 @@ client.on('interactionCreate', async (interaction) => {
             ctx.strokeRect(40, boxStartY, canvasWidth - 80, boxHeight);
 
             // 💡 解説テキストの描画
-            let textY = boxStartY + 45; 
+            let textY = boxStartY + 45;
             const textX = 60;
 
             // ① 象徴
@@ -2392,9 +2392,9 @@ client.on('interactionCreate', async (interaction) => {
             ctx.font = '18px NotoSansJP';
             ctx.fillStyle = '#e0e0e0';
             ctx.fillText(safeMeaning, textX, textY);
-            
-            textY += 35; 
-            
+
+            textY += 35;
+
             // ② 石に刻まれた意味
             ctx.font = 'bold 22px NotoSansJP';
             ctx.fillStyle = '#D2691E';
@@ -2431,21 +2431,21 @@ client.on('interactionCreate', async (interaction) => {
             console.error('Canvasルーン占いエラー:', error);
             await interaction.editReply({ content: '石の言葉を読み取る途中でつまづいちゃったちゅ…。ログを確認してちゅ💦' });
         }
+    }
+
+    // 🌤️ 天気予報 (モーダルの送信)
+    // 🌤️ 天気予報 (モーダルの送信)
+    else if (interaction.isModalSubmit() && interaction.customId === 'modal_weather') {
+        // モーダルから入力された都道府県を取得！
+        const pref = interaction.fields.getTextInputValue('input_prefecture');
+        await interaction.editReply({ content: '🌤️ 空模様を調べて、1枚の天気図を描いているちゅ…！🐭🎨' });
+
+        // 💡 修正：「北海道」の「道」が消えないように、末尾の「都・府・県」だけを消す魔法だちゅ！
+        const target = prefCoords[pref.replace(/(都|府|県)$/, '')];
+
+        if (!target) {
+            return interaction.editReply({ content: 'その都道府県のデータが見つからなかったちゅ…。漢字で正しく入力してちゅ！（例：東京、北海道、京都）' });
         }
-
-        // 🌤️ 天気予報 (モーダルの送信)
-        // 🌤️ 天気予報 (モーダルの送信)
-        else if (interaction.isModalSubmit() && interaction.customId === 'modal_weather') {
-            // モーダルから入力された都道府県を取得！
-            const pref = interaction.fields.getTextInputValue('input_prefecture');
-            await interaction.editReply({ content: '🌤️ 空模様を調べて、1枚の天気図を描いているちゅ…！🐭🎨' });
-
-            // 💡 修正：「北海道」の「道」が消えないように、末尾の「都・府・県」だけを消す魔法だちゅ！
-            const target = prefCoords[pref.replace(/(都|府|県)$/, '')]; 
-
-            if (!target) {
-                return interaction.editReply({ content: 'その都道府県のデータが見つからなかったちゅ…。漢字で正しく入力してちゅ！（例：東京、北海道、京都）' });
-            }
         try {
             const url = `https://api.open-meteo.com/v1/forecast?latitude=${target.lat}&longitude=${target.lon}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Asia%2FTokyo`;
             const response = await axios.get(url);
@@ -2457,7 +2457,7 @@ client.on('interactionCreate', async (interaction) => {
             const canvasWidth = 800;
             const dummyCanvas = createCanvas(1, 1);
             const dummyCtx = dummyCanvas.getContext('2d');
-            
+
             // 💡 1. データの準備と、各曜日の「パネルの高さ」を事前計算するちゅ！
             const daysData = [];
             let totalPanelsHeight = 0;
@@ -2468,7 +2468,7 @@ client.on('interactionCreate', async (interaction) => {
                 const rainProb = daily.precipitation_probability_max[i];
                 const maxTemp = daily.temperature_2m_max[i];
                 const minTemp = daily.temperature_2m_min[i];
-            
+
                 const weatherStatus = stripEmoji(getWeatherStatus(code));
                 const mouseComment = stripEmoji(getMouseComment(code, rainProb, maxTemp));
                 const dateStr = daily.time[i];
@@ -2477,10 +2477,10 @@ client.on('interactionCreate', async (interaction) => {
                 // 右側のコメントエリアの幅 (全体の幅 - 左側の情報幅 - パディング)
                 const commentAreaWidth = canvasWidth - 360 - panelPadding * 3;
                 const commentHeight = measureTextHeight(dummyCtx, mouseComment, commentAreaWidth, 26);
-                
+
                 // パネルの高さ（最低90px、コメントが長ければそれに合わせる）
                 const panelHeight = Math.max(90, commentHeight + panelPadding * 2);
-                
+
                 daysData.push({
                     date: dateStr,
                     status: weatherStatus,
@@ -2488,7 +2488,7 @@ client.on('interactionCreate', async (interaction) => {
                     comment: mouseComment,
                     panelHeight
                 });
-                
+
                 totalPanelsHeight += panelHeight + 15; // 15はパネル同士の隙間
             }
 
@@ -2513,7 +2513,7 @@ client.on('interactionCreate', async (interaction) => {
             ctx.font = 'bold 36px NotoSansJP';
             ctx.fillStyle = '#87CEEB';
             ctx.fillText(`${pref}の1週間予報`, canvasWidth / 2, 60);
-            
+
             ctx.font = '20px NotoSansJP';
             ctx.fillStyle = '#e0e0e0';
             ctx.fillText('ねずみが空模様を調べてきたちゅ！', canvasWidth / 2, 95);
@@ -2525,7 +2525,7 @@ client.on('interactionCreate', async (interaction) => {
 
             for (let i = 0; i < 7; i++) {
                 const day = daysData[i];
-                
+
                 // パネルの背景
                 ctx.fillStyle = '#2b2d31';
                 ctx.fillRect(startX, currentY, panelWidth, day.panelHeight);
@@ -2535,7 +2535,7 @@ client.on('interactionCreate', async (interaction) => {
 
                 // 左側の情報 (日付、天気、気温、降水確率)
                 ctx.textAlign = 'left';
-                
+
                 // 日付
                 ctx.fillStyle = '#FFD700';
                 ctx.font = 'bold 22px NotoSansJP';
@@ -2550,7 +2550,7 @@ client.on('interactionCreate', async (interaction) => {
                 ctx.fillStyle = '#ff6b6b'; // 最高気温(赤系)
                 ctx.font = '20px NotoSansJP';
                 ctx.fillText(`${day.maxTemp}℃`, startX + 20, currentY + 70);
-                
+
                 ctx.fillStyle = '#ffffff';
                 ctx.fillText(`/`, startX + 80, currentY + 70);
 
@@ -2585,36 +2585,36 @@ client.on('interactionCreate', async (interaction) => {
             console.error('Canvas天気予報エラー:', error);
             await interaction.editReply({ content: 'お天気を調べてる途中で、風に飛ばされちゃったちゅ…。' });
         }
-        }
+    }
 
-        // 🔢 ヒットアンドブロー (モーダルの送信)
-        // 🔢 ヒットアンドブロー (モーダルの送信)
-        else if (interaction.isModalSubmit() && interaction.customId === 'modal_hitandblow') {
-            // 💡 修正：モーダルの入力値は options ではなく fields.getTextInputValue で受け取るちゅ！
-            const guess = interaction.fields.getTextInputValue('input_guess');
-            const answer = generateAnswer(); 
-            const result = checkHitAndBlow(answer, guess);
+    // 🔢 ヒットアンドブロー (モーダルの送信)
+    // 🔢 ヒットアンドブロー (モーダルの送信)
+    else if (interaction.isModalSubmit() && interaction.customId === 'modal_hitandblow') {
+        // 💡 修正：モーダルの入力値は options ではなく fields.getTextInputValue で受け取るちゅ！
+        const guess = interaction.fields.getTextInputValue('input_guess');
+        const answer = generateAnswer();
+        const result = checkHitAndBlow(answer, guess);
 
-            const embed = new EmbedBuilder()
-                .setColor(result.hit === 4 ? 0xFFD700 : 0x0099FF)
-                .setTitle('🔢 ヒットアンドブローの結果')
-                .setDescription(`あなたの予想: **${guess}**`)
-                .addFields(
-                    { name: '結果', value: `**${result.hit}** Hit / **${result.blow}** Blow`, inline: true },
-                    { name: '判定', value: result.hit === 4 ? '🎉 チーズの匂いがする！' : '何も落ちてないみたい...' }
-                )
-                .setFooter({ text: '※1回ごとに正解が変わるモードです。' });
+        const embed = new EmbedBuilder()
+            .setColor(result.hit === 4 ? 0xFFD700 : 0x0099FF)
+            .setTitle('🔢 ヒットアンドブローの結果')
+            .setDescription(`あなたの予想: **${guess}**`)
+            .addFields(
+                { name: '結果', value: `**${result.hit}** Hit / **${result.blow}** Blow`, inline: true },
+                { name: '判定', value: result.hit === 4 ? '🎉 チーズの匂いがする！' : '何も落ちてないみたい...' }
+            )
+            .setFooter({ text: '※1回ごとに正解が変わるモードです。' });
 
-            // 💡 元のメニューボタンを綺麗に消して、結果を表示するちゅ！
-            await interaction.editReply({ 
-                content: 'ヒット＆ブローの結果だちゅ！🎯', 
-                embeds: [embed], 
-                components: [] 
-            });
-        }
+        // 💡 元のメニューボタンを綺麗に消して、結果を表示するちゅ！
+        await interaction.editReply({
+            content: 'ヒット＆ブローの結果だちゅ！🎯',
+            embeds: [embed],
+            components: []
+        });
+    }
 
-        // 🐭 ねずみ画像関連
-        else if (['btn_mouse', 'btn_rat', 'btn_not_mouse'].includes(interaction.customId)) {
+    // 🐭 ねずみ画像関連
+    else if (['btn_mouse', 'btn_rat', 'btn_not_mouse'].includes(interaction.customId)) {
         let selectedList = [];
         let titleMsg = "";
         let themeColor = ""; // 💡 枠線や文字の色をコマンドごとに変えるちゅ！
@@ -2646,11 +2646,11 @@ client.on('interactionCreate', async (interaction) => {
             const img = await loadImage(imagePath);
             const canvasWidth = 600;
             const contentWidth = 500; // 画像の表示幅
-            
+
             // アスペクト比を維持した高さを計算するちゅ
             const aspectRatio = img.width / img.height;
             const drawHeight = contentWidth / Math.max(0.1, aspectRatio);
-            
+
             // 全体のキャンバス高さを決定 (上の余白 + 画像の高さ + 下の余白)
             const headerHeight = 100;
             const footerHeight = 80;
@@ -2676,10 +2676,10 @@ client.on('interactionCreate', async (interaction) => {
             // 💡 写真の描画
             const imgX = (canvasWidth - contentWidth) / 2;
             const imgY = headerHeight;
-            
+
             // 画像を描画
             ctx.drawImage(img, imgX, imgY, contentWidth, drawHeight);
-            
+
             // 写真の周りに白い枠線をつけて、ポラロイドっぽくするちゅ！
             ctx.strokeStyle = '#ffffff';
             ctx.lineWidth = 4;
@@ -2701,11 +2701,11 @@ client.on('interactionCreate', async (interaction) => {
             console.error('Canvas動物画像エラー:', error);
             await interaction.editReply({ content: '写真の現像に失敗しちゃったちゅ…。' });
         }
-        }
-        
-        // 🐭 ねずみクイズ (btn_quiz)
-        else if (interaction.customId === 'btn_quiz') {
-            const isNezumi = Math.random() < 0.5;
+    }
+
+    // 🐭 ねずみクイズ (btn_quiz)
+    else if (interaction.customId === 'btn_quiz') {
+        const isNezumi = Math.random() < 0.5;
         let category = isNezumi ? (Math.random() < 0.5 ? 'mouse' : 'rat') : 'not_mouse';
         const chosen = extraImages[category][Math.floor(Math.random() * extraImages[category].length)];
         const imagePath = path.resolve(__dirname, 'images', chosen.file);
@@ -2719,10 +2719,10 @@ client.on('interactionCreate', async (interaction) => {
             const img = await loadImage(imagePath);
             const canvasWidth = 600;
             const contentWidth = 500;
-            
+
             const aspectRatio = img.width / img.height;
             const drawHeight = contentWidth / Math.max(0.1, aspectRatio);
-            
+
             // キャンバス高さを決定
             const headerHeight = 120;
             const footerHeight = 40;
@@ -2744,7 +2744,7 @@ client.on('interactionCreate', async (interaction) => {
                 ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
 
                 ctx.textAlign = 'center';
-                
+
                 // タイトルとサブタイトルの文字を描画（※文字化け防止のため絵文字はナシだちゅ）
                 if (!isResult) {
                     ctx.font = 'bold 36px NotoSansJP';
@@ -2766,7 +2766,7 @@ client.on('interactionCreate', async (interaction) => {
                 const imgX = (canvasWidth - contentWidth) / 2;
                 const imgY = headerHeight;
                 ctx.drawImage(img, imgX, imgY, contentWidth, drawHeight);
-                
+
                 // 写真の白い枠線
                 ctx.strokeStyle = '#ffffff';
                 ctx.lineWidth = 4;
@@ -2785,17 +2785,17 @@ client.on('interactionCreate', async (interaction) => {
             );
 
             // 💡 修正：response に直接入れるのではなく、一度送信してから fetchReply() で掴むちゅ！
-            await interaction.editReply({ 
-                content: '❓ クイズの時間だちゅ！下のボタンから選んでね！', 
+            await interaction.editReply({
+                content: '❓ クイズの時間だちゅ！下のボタンから選んでね！',
                 embeds: [], // 古いEmbedが残らないように空にするちゅ
-                files: [attachment], 
-                components: [row] 
+                files: [attachment],
+                components: [row]
             });
 
             // 💡 【超重要】送信したメッセージをここでしっかりと掴むちゅ！
             const message = await interaction.fetchReply();
             const filter = i => i.user.id === interaction.user.id;
-            
+
             try {
                 // 💡 4. ボタンが押されるのを待つちゅ（余裕をもって60秒に変更！）
                 const confirmation = await message.awaitMessageComponent({ filter, time: 60000 });
@@ -2806,9 +2806,9 @@ client.on('interactionCreate', async (interaction) => {
                 const resultPng = await buildQuizCanvas(true, isCorrect);
                 const resultAttachment = new AttachmentBuilder(resultPng, { name: 'quiz_result.png' });
 
-                await confirmation.update({ 
-                    content: isCorrect ? '🎊 おめでとう！ねずみマスターだちゅ！' : '😢 どんまいだちゅ…次は当ててね！', 
-                    files: [resultAttachment], 
+                await confirmation.update({
+                    content: isCorrect ? '🎊 おめでとう！ねずみマスターだちゅ！' : '😢 どんまいだちゅ…次は当ててね！',
+                    files: [resultAttachment],
                     components: [] // ボタンを消すちゅ
                 });
             } catch (e) {
@@ -2821,153 +2821,153 @@ client.on('interactionCreate', async (interaction) => {
             console.error('Canvasクイズエラー:', error);
             await interaction.editReply({ content: 'クイズの準備中にエラーが起きたちゅ…。' });
         }
-        }
+    }
 
     // 🍣 寿司の注文 (btn_sushi_order)
-        // 💡 【追加】ボタンを押した時に、お寿司のリストを表示する処理だちゅ！
-        // 🍣 寿司の注文 (btn_sushi_order)
-        else if (interaction.customId === 'btn_sushi_order') {
-            const sushiOptions = sushiMenu.map((item, index) => ({
-                label: `${item.name} (${item.price}円)`,
-                description: item.description,
-                value: index.toString(),
-                emoji: '🍣' // Discordのシステム絵文字は文字化けしないからOKちゅ！
-            }));
+    // 💡 【追加】ボタンを押した時に、お寿司のリストを表示する処理だちゅ！
+    // 🍣 寿司の注文 (btn_sushi_order)
+    else if (interaction.customId === 'btn_sushi_order') {
+        const sushiOptions = sushiMenu.map((item, index) => ({
+            label: `${item.name} (${item.price}円)`,
+            description: item.description,
+            value: index.toString(),
+            emoji: '🍣' // Discordのシステム絵文字は文字化けしないからOKちゅ！
+        }));
 
-            const row = new ActionRowBuilder().addComponents(
-                new StringSelectMenuBuilder()
-                    .setCustomId('sushi_select_order')
-                    .setPlaceholder('どのネタを握るちゅ？🍣')
-                    .addOptions(sushiOptions)
-            );
+        const row = new ActionRowBuilder().addComponents(
+            new StringSelectMenuBuilder()
+                .setCustomId('sushi_select_order')
+                .setPlaceholder('どのネタを握るちゅ？🍣')
+                .addOptions(sushiOptions)
+        );
 
-            try {
-                // 💡 ここでさっき作った歓迎キャンバスを呼び出すちゅ！
-                const pngBuffer = await generateSushiWelcomeCanvas();
-                const attachment = new AttachmentBuilder(pngBuffer, { name: 'sushi_welcome.png' });
+        try {
+            // 💡 ここでさっき作った歓迎キャンバスを呼び出すちゅ！
+            const pngBuffer = await generateSushiWelcomeCanvas();
+            const attachment = new AttachmentBuilder(pngBuffer, { name: 'sushi_welcome.png' });
 
-                await interaction.editReply({ 
-                    content: 'へいらっしゃい！', 
-                    files: [attachment],
-                    components: [row] 
-                });
-            } catch (e) {
-                console.error('寿司歓迎描画エラー:', e);
-                await interaction.editReply({ 
-                    content: 'へいらっしゃい！新鮮なネタが揃ってるちゅ！注文を選んでね！', 
-                    components: [row] 
-                });
-            }
+            await interaction.editReply({
+                content: 'へいらっしゃい！',
+                files: [attachment],
+                components: [row]
+            });
+        } catch (e) {
+            console.error('寿司歓迎描画エラー:', e);
+            await interaction.editReply({
+                content: 'へいらっしゃい！新鮮なネタが揃ってるちゅ！注文を選んでね！',
+                components: [row]
+            });
         }
+    }
 
-        // 💡 【超・軽量爆速版】プルダウンで注文した時の処理 (Canvasでお寿司の提供！)
-        else if (interaction.isStringSelectMenu() && interaction.customId === 'sushi_select_order') {
-            await interaction.deferUpdate(); 
+    // 💡 【超・軽量爆速版】プルダウンで注文した時の処理 (Canvasでお寿司の提供！)
+    else if (interaction.isStringSelectMenu() && interaction.customId === 'sushi_select_order') {
+        await interaction.deferUpdate();
 
-            // 💡 メニューを消しつつ、ローディングメッセージで確実に上書きするちゅ！
-            try { await interaction.editReply({ content: '🍣 大将が心を込めて握っているちゅ…お待ちを！', components: [] }); } catch(e) {}
+        // 💡 メニューを消しつつ、ローディングメッセージで確実に上書きするちゅ！
+        try { await interaction.editReply({ content: '🍣 大将が心を込めて握っているちゅ…お待ちを！', components: [] }); } catch (e) { }
 
-            const selectedIndex = parseInt(interaction.values[0], 10);
-            const selectedSushi = sushiMenu[selectedIndex];
+        const selectedIndex = parseInt(interaction.values[0], 10);
+        const selectedSushi = sushiMenu[selectedIndex];
 
-            const stripEmoji = (str) => str.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '').replace(/[\u2600-\u27BF]/g, '').trim();
+        const stripEmoji = (str) => str.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, '').replace(/[\u2600-\u27BF]/g, '').trim();
 
-            try {
-                const imagePath = path.join(__dirname, 'images', selectedSushi.image);
-                const canvasWidth = 600;
-                const contentWidth = 500;
-                let drawHeight = 300;
-                let img = null;
+        try {
+            const imagePath = path.join(__dirname, 'images', selectedSushi.image);
+            const canvasWidth = 600;
+            const contentWidth = 500;
+            let drawHeight = 300;
+            let img = null;
 
-                if (fs.existsSync(imagePath)) {
-                    img = await loadImage(imagePath);
-                    const aspectRatio = img.width / img.height;
-                    drawHeight = contentWidth / Math.max(0.1, aspectRatio);
-                }
-
-                const safeName = stripEmoji(selectedSushi.name);
-                const safeDesc = stripEmoji(selectedSushi.description);
-
-                const dummyCanvas = createCanvas(1, 1);
-                const dummyCtx = dummyCanvas.getContext('2d');
-                dummyCtx.font = '22px NotoSansJP';
-                const descHeight = measureTextHeight(dummyCtx, safeDesc, contentWidth - 40, 32);
-
-                const headerHeight = 100;
-                const textYStart = headerHeight + drawHeight + 30;
-                const boxHeight = 50 + descHeight + 40; 
-                const canvasHeight = textYStart + boxHeight + 40;
-
-                const canvas = createCanvas(canvasWidth, canvasHeight);
-                const ctx = canvas.getContext('2d');
-
-                // 背景と枠線
-                ctx.fillStyle = '#1e1e24';
-                ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-                ctx.strokeStyle = '#00FA9A'; 
-                ctx.lineWidth = 10;
-                ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
-
-                ctx.textAlign = 'center';
-                ctx.font = 'bold 36px NotoSansJP';
-                ctx.fillStyle = '#ffffff';
-                ctx.fillText('へいお待ち！', canvasWidth / 2, 60);
-
-                const imgX = (canvasWidth - contentWidth) / 2;
-                const imgY = headerHeight;
-                if (img) {
-                    ctx.drawImage(img, imgX, imgY, contentWidth, drawHeight);
-                    ctx.strokeStyle = '#ffffff';
-                    ctx.lineWidth = 4;
-                    ctx.strokeRect(imgX, imgY, contentWidth, drawHeight);
-                } else {
-                    ctx.fillStyle = '#333';
-                    ctx.fillRect(imgX, imgY, contentWidth, drawHeight);
-                    ctx.fillStyle = '#fff';
-                    ctx.fillText('画像なし', canvasWidth / 2, imgY + drawHeight / 2);
-                }
-
-                ctx.fillStyle = '#2b2d31';
-                ctx.fillRect(imgX, textYStart, contentWidth, boxHeight);
-                ctx.strokeStyle = '#00FA9A';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(imgX, textYStart, contentWidth, boxHeight);
-
-                ctx.textAlign = 'left';
-                ctx.font = 'bold 28px NotoSansJP';
-                ctx.fillStyle = '#FFD700';
-                ctx.fillText(safeName, imgX + 20, textYStart + 40);
-
-                ctx.textAlign = 'right';
-                ctx.font = 'bold 24px NotoSansJP';
-                ctx.fillStyle = '#ff6b6b';
-                ctx.fillText(`${selectedSushi.price}円`, imgX + contentWidth - 20, textYStart + 40);
-
-                ctx.textAlign = 'left';
-                ctx.font = '22px NotoSansJP';
-                ctx.fillStyle = '#e0e0e0';
-                drawCanvasText(ctx, safeDesc, imgX + 20, textYStart + 80, contentWidth - 40, 32);
-
-                const pngBuffer = await canvas.encode('png');
-                const attachment = new AttachmentBuilder(pngBuffer, { name: 'sushi_canvas.png' });
-
-                await interaction.editReply({ 
-                    content: `✨ 握りたての **${safeName}** だちゅ！`, 
-                    embeds: [], 
-                    components: [], // 完全にメニューを消す！
-                    files: [attachment]
-                });
-
-            } catch (error) {
-                console.error('Canvas寿司提供エラー:', error);
-                await interaction.editReply({ content: 'お寿司を落としちゃったちゅ…', components: [] });
+            if (fs.existsSync(imagePath)) {
+                img = await loadImage(imagePath);
+                const aspectRatio = img.width / img.height;
+                drawHeight = contentWidth / Math.max(0.1, aspectRatio);
             }
-        }
 
-        // 💰 おあいそクイズ (btn_sushi_oaiso)
-        else if (interaction.customId === 'btn_sushi_oaiso') {
-            const targetPrice = Math.floor(Math.random() * 4) * 1000 + 2000; 
-        
+            const safeName = stripEmoji(selectedSushi.name);
+            const safeDesc = stripEmoji(selectedSushi.description);
+
+            const dummyCanvas = createCanvas(1, 1);
+            const dummyCtx = dummyCanvas.getContext('2d');
+            dummyCtx.font = '22px NotoSansJP';
+            const descHeight = measureTextHeight(dummyCtx, safeDesc, contentWidth - 40, 32);
+
+            const headerHeight = 100;
+            const textYStart = headerHeight + drawHeight + 30;
+            const boxHeight = 50 + descHeight + 40;
+            const canvasHeight = textYStart + boxHeight + 40;
+
+            const canvas = createCanvas(canvasWidth, canvasHeight);
+            const ctx = canvas.getContext('2d');
+
+            // 背景と枠線
+            ctx.fillStyle = '#1e1e24';
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+            ctx.strokeStyle = '#00FA9A';
+            ctx.lineWidth = 10;
+            ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
+
+            ctx.textAlign = 'center';
+            ctx.font = 'bold 36px NotoSansJP';
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText('へいお待ち！', canvasWidth / 2, 60);
+
+            const imgX = (canvasWidth - contentWidth) / 2;
+            const imgY = headerHeight;
+            if (img) {
+                ctx.drawImage(img, imgX, imgY, contentWidth, drawHeight);
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 4;
+                ctx.strokeRect(imgX, imgY, contentWidth, drawHeight);
+            } else {
+                ctx.fillStyle = '#333';
+                ctx.fillRect(imgX, imgY, contentWidth, drawHeight);
+                ctx.fillStyle = '#fff';
+                ctx.fillText('画像なし', canvasWidth / 2, imgY + drawHeight / 2);
+            }
+
+            ctx.fillStyle = '#2b2d31';
+            ctx.fillRect(imgX, textYStart, contentWidth, boxHeight);
+            ctx.strokeStyle = '#00FA9A';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(imgX, textYStart, contentWidth, boxHeight);
+
+            ctx.textAlign = 'left';
+            ctx.font = 'bold 28px NotoSansJP';
+            ctx.fillStyle = '#FFD700';
+            ctx.fillText(safeName, imgX + 20, textYStart + 40);
+
+            ctx.textAlign = 'right';
+            ctx.font = 'bold 24px NotoSansJP';
+            ctx.fillStyle = '#ff6b6b';
+            ctx.fillText(`${selectedSushi.price}円`, imgX + contentWidth - 20, textYStart + 40);
+
+            ctx.textAlign = 'left';
+            ctx.font = '22px NotoSansJP';
+            ctx.fillStyle = '#e0e0e0';
+            drawCanvasText(ctx, safeDesc, imgX + 20, textYStart + 80, contentWidth - 40, 32);
+
+            const pngBuffer = await canvas.encode('png');
+            const attachment = new AttachmentBuilder(pngBuffer, { name: 'sushi_canvas.png' });
+
+            await interaction.editReply({
+                content: `✨ 握りたての **${safeName}** だちゅ！`,
+                embeds: [],
+                components: [], // 完全にメニューを消す！
+                files: [attachment]
+            });
+
+        } catch (error) {
+            console.error('Canvas寿司提供エラー:', error);
+            await interaction.editReply({ content: 'お寿司を落としちゃったちゅ…', components: [] });
+        }
+    }
+
+    // 💰 おあいそクイズ (btn_sushi_oaiso)
+    else if (interaction.customId === 'btn_sushi_oaiso') {
+        const targetPrice = Math.floor(Math.random() * 4) * 1000 + 2000;
+
         oaisoGames.set(interaction.user.id, {
             target: targetPrice,
             currentTotal: 0,
@@ -3000,24 +3000,24 @@ client.on('interactionCreate', async (interaction) => {
             const pngBuffer = await generateOaisoCanvas(oaisoGames.get(interaction.user.id), 'playing', extraMsg, 'daisho.jpg');
             const attachment = new AttachmentBuilder(pngBuffer, { name: 'oaiso_start.png' });
 
-            await interaction.editReply({ 
-                content: '大将と勝負だちゅ！🍣', 
-                embeds: [], 
-                files: [attachment], 
-                components: [selectRow, buttonRow] 
+            await interaction.editReply({
+                content: '大将と勝負だちゅ！🍣',
+                embeds: [],
+                files: [attachment],
+                components: [selectRow, buttonRow]
             });
         } catch (e) {
             console.error('おあいそ開始エラー:', e);
             await interaction.editReply({ content: 'のれんを出すのに失敗したちゅ…' });
         }
-        }
+    }
 
-        // 🌱 ペットキャッチ (btn_pet_catch)
-        else if (interaction.customId === 'btn_pet_catch') {
-            try {
+    // 🌱 ペットキャッチ (btn_pet_catch)
+    else if (interaction.customId === 'btn_pet_catch') {
+        try {
             // 💡 修正：クイズの写真リストではなく、ペット(モンスター)のリストから選ぶちゅ！
             const targetPet = petSpecies[Math.floor(Math.random() * petSpecies.length)];
-            
+
             // プレイヤーがどの動物に遭遇したか記憶するちゅ
             petCatches.set(interaction.user.id, targetPet);
 
@@ -3037,21 +3037,21 @@ client.on('interactionCreate', async (interaction) => {
             const pngBuffer = await generatePetCatchCanvas(targetPet, 'appear', extraMsg);
             const attachment = new AttachmentBuilder(pngBuffer, { name: 'pet_appear.png' });
 
-            await interaction.editReply({ 
-                content: 'ガサガサッ…！🌿', 
-                embeds: [], 
-                files: [attachment], 
-                components: [buttonRow] 
+            await interaction.editReply({
+                content: 'ガサガサッ…！🌿',
+                embeds: [],
+                files: [attachment],
+                components: [buttonRow]
             });
         } catch (e) {
             console.error('ペット出現エラー:', e);
             await interaction.editReply({ content: '草むらに逃げられちゃったちゅ…（※黒い画面のエラーログを見てちゅ！）' });
         }
-        }
+    }
 
-        // 📊 ペットステータス (btn_pet_status)
-        else if (interaction.customId === 'btn_pet_status') {
-            const userId = interaction.user.id;
+    // 📊 ペットステータス (btn_pet_status)
+    else if (interaction.customId === 'btn_pet_status') {
+        const userId = interaction.user.id;
         const myPet = userPets[userId];
 
         if (!myPet) {
@@ -3080,7 +3080,7 @@ client.on('interactionCreate', async (interaction) => {
             // 💡 2. キャンバスのサイズを決定（ステータス情報が多いから縦長にするちゅ！）
             const canvasWidth = 600;
             const headerHeight = 100;
-            const statusBoxHeight = 350; 
+            const statusBoxHeight = 350;
             const canvasHeight = headerHeight + drawHeight + statusBoxHeight + 60;
 
             const canvas = createCanvas(canvasWidth, canvasHeight);
@@ -3142,7 +3142,7 @@ client.on('interactionCreate', async (interaction) => {
             ctx.fillRect(60, barY, barWidth, 30);
             ctx.fillStyle = '#00FF00'; // 経験値の色
             ctx.fillRect(60, barY, barWidth * expPercent, 30);
-            
+
             ctx.font = '18px NotoSansJP';
             ctx.fillStyle = '#ffffff';
             ctx.textAlign = 'center';
@@ -3170,24 +3170,24 @@ client.on('interactionCreate', async (interaction) => {
             console.error('Canvasペットステータスエラー:', error);
             await interaction.editReply({ content: 'ステータス画面を作るのに失敗しちゃったちゅ…。' });
         }
-        }
+    }
 
-        // 💪 ペット特訓 (コース選択メニューの送信)
-        else if (interaction.isStringSelectMenu() && interaction.customId === 'select_pet_train') {
-            const course = interaction.values[0]; // 選択されたコース
-            const userId = interaction.user.id;
+    // 💪 ペット特訓 (コース選択メニューの送信)
+    else if (interaction.isStringSelectMenu() && interaction.customId === 'select_pet_train') {
+        const course = interaction.values[0]; // 選択されたコース
+        const userId = interaction.user.id;
         const myPet = userPets[userId];
-        
+
         // 💡 クールダウン管理（もし一番上に無ければここでも動くようにしておくちゅ）
         if (!global.trainCooldowns) global.trainCooldowns = new Map();
-        
+
         if (!myPet) {
             return interaction.editReply({ content: '特訓する相棒がいないちゅ！まずは `/pet_catch` で見つけるちゅ！🌱' });
         }
 
-        const COOLDOWN_TIME = 5 * 60 * 1000; 
+        const COOLDOWN_TIME = 5 * 60 * 1000;
         const lastTrain = global.trainCooldowns.get(userId);
-        
+
         if (lastTrain && (Date.now() - lastTrain) < COOLDOWN_TIME) {
             const timeLeft = COOLDOWN_TIME - (Date.now() - lastTrain);
             const minutes = Math.floor(timeLeft / 60000);
@@ -3303,12 +3303,12 @@ client.on('interactionCreate', async (interaction) => {
             console.error('Canvas特訓エラー:', error);
             await interaction.editReply({ content: '特訓の記録中に筆が折れちゃったちゅ…。' });
         }
-        }
+    }
 
-        // ⚔️ ペットバトル (対戦相手選択メニューの送信)
-        else if (interaction.isUserSelectMenu() && interaction.customId === 'select_pet_battle') {
-            const opponentUser = interaction.users.first(); // 選択されたユーザーを取得！
-            const challengerId = interaction.user.id;
+    // ⚔️ ペットバトル (対戦相手選択メニューの送信)
+    else if (interaction.isUserSelectMenu() && interaction.customId === 'select_pet_battle') {
+        const opponentUser = interaction.users.first(); // 選択されたユーザーを取得！
+        const challengerId = interaction.user.id;
         const opponentId = opponentUser.id;
 
         let myPet = userPets[challengerId];
@@ -3319,11 +3319,11 @@ client.on('interactionCreate', async (interaction) => {
         if (challengerId === opponentId) return interaction.editReply({ content: '自分自身とは戦えないちゅ！🐭💦' });
 
         const initStats = (pet) => ({
-            hp: pet.maxHp, 
-            stagger: pet.staggerMax || 20, 
+            hp: pet.maxHp,
+            stagger: pet.staggerMax || 20,
             sp: 0,
-            atk: pet.atk, 
-            def: pet.def || 3, 
+            atk: pet.atk,
+            def: pet.def || 3,
             spd: pet.spd || 5
         });
 
@@ -3344,16 +3344,16 @@ client.on('interactionCreate', async (interaction) => {
         const sendBattleTurn = async (isFinal = false) => {
             const pngBuffer = await generatePetBattleCanvas(myPet, oppPet, myState, oppState, battleLog, turn);
             const attachment = new AttachmentBuilder(pngBuffer, { name: `battle_t${turn}_${Date.now()}.png` });
-            
-            return await interaction.editReply({ 
-                content: isFinal ? '✨ 決着がついたちゅ！！' : `⚔️ バトル進行中！ (ターン ${turn})`, 
-                files: [attachment], 
-                components: isFinal ? [] : [getActionRow()] 
+
+            return await interaction.editReply({
+                content: isFinal ? '✨ 決着がついたちゅ！！' : `⚔️ バトル進行中！ (ターン ${turn})`,
+                files: [attachment],
+                components: isFinal ? [] : [getActionRow()]
             });
         };
 
         await sendBattleTurn();
-        
+
         const message = await interaction.fetchReply();
         const collector = message.createMessageComponentCollector({ filter: i => i.user.id === challengerId, time: 300000 });
 
@@ -3362,7 +3362,7 @@ client.on('interactionCreate', async (interaction) => {
             let myAction = i.customId;
             let oppAction = (oppState.sp >= 10 && Math.random() < 0.7) ? 'btn_special' : ['btn_atk', 'btn_atk', 'btn_def', 'btn_sp'][Math.floor(Math.random() * 4)];
 
-            battleLog = ""; 
+            battleLog = "";
 
             const doAction = (isMe, action, isEnemyDefending) => {
                 let attackerBase = isMe ? myPet : oppPet;
@@ -3412,7 +3412,7 @@ client.on('interactionCreate', async (interaction) => {
             } else {
                 let winnerUser = myState.hp > 0 ? interaction.user : opponentUser;
                 let winnerPet = myState.hp > 0 ? myPet : oppPet;
-                
+
                 let rankMsg = "";
                 let myOldRank = myPet.rank;
                 let oppOldRank = oppPet.rank;
@@ -3425,7 +3425,7 @@ client.on('interactionCreate', async (interaction) => {
                     } else {
                         rankMsg = `防衛成功だちゅ！ 現在 第${myPet.rank}位 をキープしてるちゅ！`;
                     }
-                    myPet.exp += 20; 
+                    myPet.exp += 20;
                 } else {
                     if (oppOldRank > myOldRank) {
                         oppPet.rank = myOldRank;
@@ -3450,10 +3450,10 @@ client.on('interactionCreate', async (interaction) => {
                     const resultAttach = new AttachmentBuilder(resultPng, { name: `battle_result_${Date.now()}.png` });
 
                     // 💡 最後のバトル画面を上書きして、結果画像を表示するちゅ！
-                    await interaction.editReply({ 
-                        content: '🎊 決着！リザルトボードだちゅ！', 
-                        files: [resultAttach], 
-                        components: [] 
+                    await interaction.editReply({
+                        content: '🎊 決着！リザルトボードだちゅ！',
+                        files: [resultAttach],
+                        components: []
                     });
                 } catch (err) {
                     console.error('リザルト描画エラー:', err);
@@ -3461,21 +3461,21 @@ client.on('interactionCreate', async (interaction) => {
                 }
             }
         });
-        }
+    }
 
-        // 🏆 ペットランキング (btn_pet_ranking)
-        else if (interaction.customId === 'btn_pet_ranking') {
-            const sortedPets = await Promise.all(
+    // 🏆 ペットランキング (btn_pet_ranking)
+    else if (interaction.customId === 'btn_pet_ranking') {
+        const sortedPets = await Promise.all(
             Object.entries(userPets).map(async ([userId, pet]) => {
                 let userName = '不明なテイマー';
                 try {
                     const user = await client.users.fetch(userId);
                     userName = user.username;
-                } catch(e) {}
+                } catch (e) { }
                 return { userId, userName, ...pet };
             })
         );
-        
+
         // ランク順に並べるちゅ
         sortedPets.sort((a, b) => a.rank - b.rank);
 
@@ -3488,19 +3488,19 @@ client.on('interactionCreate', async (interaction) => {
             const pngBuffer = await generatePetRankingCanvas(sortedPets);
             const attachment = new AttachmentBuilder(pngBuffer, { name: `ranking_${Date.now()}.png` });
 
-            await interaction.editReply({ 
-                content: '🏆 現在のトップテイマーたちの記録だちゅ！', 
-                files: [attachment] 
+            await interaction.editReply({
+                content: '🏆 現在のトップテイマーたちの記録だちゅ！',
+                files: [attachment]
             });
         } catch (error) {
             console.error('ランキング描画エラー:', error);
             await interaction.editReply({ content: 'ランキングボードが重すぎて持ち上げられなかったちゅ…💦' });
         }
-        }
+    }
 
-        // 🍃 ペットリリース (btn_pet_release)
-        else if (interaction.customId === 'btn_pet_release') {
-            const userId = interaction.user.id;
+    // 🍃 ペットリリース (btn_pet_release)
+    else if (interaction.customId === 'btn_pet_release') {
+        const userId = interaction.user.id;
         const myPet = userPets[userId];
 
         if (!myPet) {
@@ -3513,7 +3513,7 @@ client.on('interactionCreate', async (interaction) => {
             const attachment = new AttachmentBuilder(pngBuffer, { name: `release_${Date.now()}.png` });
 
             // 💡 2. データを削除し、ランキングを詰めるちゅ
-            const releasedRank = myPet.rank; 
+            const releasedRank = myPet.rank;
             delete userPets[userId];
 
             for (const id in userPets) {
@@ -3524,22 +3524,22 @@ client.on('interactionCreate', async (interaction) => {
             savePets();
 
             // 💡 3. 画像を送信してお別れだちゅ…
-            await interaction.editReply({ 
-                content: '相棒を自然に還してきたちゅ。元気でね…！🍃', 
-                embeds: [], 
-                files: [attachment] 
+            await interaction.editReply({
+                content: '相棒を自然に還してきたちゅ。元気でね…！🍃',
+                embeds: [],
+                files: [attachment]
             });
 
         } catch (error) {
             console.error('ペットリリース描画エラー:', error);
             await interaction.editReply({ content: 'お別れの準備中に、切なくて筆が止まっちゃったちゅ…💦' });
         }
-        }
+    }
 
-        // 💡 この下には、既存のゲーム進行用ボタンの処理（寿司選択、バトル選択など）や、
-        // 💡 【超・軽量爆速版】プルダウンで注文した時の処理 (Canvasでお寿司の提供！)
+    // 💡 この下には、既存のゲーム進行用ボタンの処理（寿司選択、バトル選択など）や、
+    // 💡 【超・軽量爆速版】プルダウンで注文した時の処理 (Canvasでお寿司の提供！)
     else if (interaction.isStringSelectMenu() && interaction.customId === 'sushi_select_order') {
-        await interaction.deferUpdate(); 
+        await interaction.deferUpdate();
 
         const selectedIndex = parseInt(interaction.values[0], 10);
         const selectedSushi = sushiMenu[selectedIndex];
@@ -3634,11 +3634,11 @@ client.on('interactionCreate', async (interaction) => {
             const pngBuffer = await canvas.encode('png');
             const attachment = new AttachmentBuilder(pngBuffer, { name: 'sushi_canvas.png' });
 
-            await interaction.followUp({ 
-                content: `✨ 握りたての **${safeName}** だちゅ！`, 
-                embeds: [], 
-                files: [attachment], 
-                ephemeral: isHidden 
+            await interaction.followUp({
+                content: `✨ 握りたての **${safeName}** だちゅ！`,
+                embeds: [],
+                files: [attachment],
+                ephemeral: isHidden
             });
 
         } catch (error) {
@@ -3646,7 +3646,7 @@ client.on('interactionCreate', async (interaction) => {
             await interaction.followUp({ content: 'お寿司を落としちゃったちゅ…', ephemeral: isHidden });
         }
     }
-    
+
 
     // 💡 【超・軽量爆速版】おあいそボタンを押した時の結果発表 (メニューを消して結果を表示！)
     // 💡 【追加・復活！】おあいそクイズで注文を追加した時の処理
@@ -3670,9 +3670,9 @@ client.on('interactionCreate', async (interaction) => {
             const pngBuffer = await generateOaisoCanvas(game, 'playing', extraMsg, selectedSushi.image);
             const attachment = new AttachmentBuilder(pngBuffer, { name: 'oaiso_playing.png' });
 
-            await interaction.editReply({ 
-                content: 'へいお待ち！🍣', 
-                files: [attachment] 
+            await interaction.editReply({
+                content: 'へいお待ち！🍣',
+                files: [attachment]
             });
         } catch (e) {
             console.error('おあいそ追加エラー:', e);
@@ -3704,10 +3704,10 @@ client.on('interactionCreate', async (interaction) => {
 
             oaisoGames.delete(userId);
 
-            await interaction.editReply({ 
-                content: 'おあいそだちゅ！結果発表〜！🥁✨', 
+            await interaction.editReply({
+                content: 'おあいそだちゅ！結果発表〜！🥁✨',
                 files: [attachment],
-                components: [] 
+                components: []
             });
         } catch (e) {
             console.error('おあいそ結果エラー:', e);
@@ -3722,17 +3722,17 @@ client.on('interactionCreate', async (interaction) => {
         const targetPet = petCatches.get(userId);
 
         if (!targetPet) {
-            return interaction.followUp({ 
-                content: 'もうその子はどこかに行っちゃったみたいだちゅ。', 
-                flags: MessageFlags.Ephemeral 
+            return interaction.followUp({
+                content: 'もうその子はどこかに行っちゃったみたいだちゅ。',
+                flags: MessageFlags.Ephemeral
             });
         }
 
         if (interaction.customId === 'catch_ignore') {
             petCatches.delete(userId);
-            return interaction.editReply({ 
-                content: 'そっと見逃してあげたちゅ。バイバイ！👋', 
-                embeds: [], components: [], files: [] 
+            return interaction.editReply({
+                content: 'そっと見逃してあげたちゅ。バイバイ！👋',
+                embeds: [], components: [], files: []
             });
         }
 
@@ -3779,24 +3779,24 @@ client.on('interactionCreate', async (interaction) => {
             const attachment = new AttachmentBuilder(pngBuffer, { name: 'pet_result.png' });
 
             petCatches.delete(userId);
-            
-            await interaction.editReply({ 
-                content: isSuccess ? 'やったね！✨' : '残念だちゅ…💦', 
-                embeds: [], 
-                components: [], 
+
+            await interaction.editReply({
+                content: isSuccess ? 'やったね！✨' : '残念だちゅ…💦',
+                embeds: [],
+                components: [],
                 files: [attachment]
             });
         } catch (e) {
             console.error('ペット捕獲結果エラー:', e);
-            await interaction.followUp({ 
-                content: 'モンスターボールが壊れちゃったちゅ…', 
-                flags: MessageFlags.Ephemeral 
+            await interaction.followUp({
+                content: 'モンスターボールが壊れちゃったちゅ…',
+                flags: MessageFlags.Ephemeral
             });
         }
     }
     // 💡 /kibun コマンド (気分を記録する)
     else if (interaction.commandName === 'kibun') {
-        await interaction.deferReply({ ephemeral: true }); 
+        await interaction.deferReply({ ephemeral: true });
         const userId = interaction.user.id;
         const level = interaction.options.getInteger('level');
         const memo = interaction.options.getString('memo') || '';
@@ -3807,11 +3807,11 @@ client.on('interactionCreate', async (interaction) => {
 
         const now = Date.now();
         userKibun[userId].push({ date: now, level: level, memo: memo });
-        saveKibun(); 
+        saveKibun();
 
         const emojis = { 5: '✨', 4: '☀️', 3: '☁️', 2: '🌧️', 1: '⚡' };
         const embed = new EmbedBuilder()
-            .setColor(0x87CEEB) 
+            .setColor(0x87CEEB)
             .setTitle(`心の天気図に記録したちゅ！ ${emojis[level]}`)
             .setDescription(`今の気分: **レベル${level}**\n${memo ? `メモ: ${memo}` : ''}`)
             .setFooter({ text: '日曜日の夜22時に、セットされたチャンネルへまとめを送るちゅよ！' });
@@ -3829,10 +3829,10 @@ client.on('interactionCreate', async (interaction) => {
         for (const [id, channel] of channels) {
             const userPerms = channel.permissionsFor(interaction.member);
             const botPerms = channel.permissionsFor(interaction.guild.members.me);
-            
+
             if (userPerms?.has('SendMessages') && userPerms?.has('ViewChannel') &&
                 botPerms?.has('SendMessages') && botPerms?.has('ViewChannel')) {
-                
+
                 validChannels.push({
                     label: `#${channel.name}`,
                     value: channel.id,
@@ -3863,28 +3863,28 @@ client.on('interactionCreate', async (interaction) => {
     // 💡 プルダウンメニューでチャンネルが選ばれた時の処理（個人用に保存！）
     else if (interaction.isStringSelectMenu() && interaction.customId === 'kibun_select_channel') {
         await interaction.deferUpdate({ ephemeral: true });
-        
-        const userId = interaction.user.id; 
-        const channelId = interaction.values[0]; 
+
+        const userId = interaction.user.id;
+        const channelId = interaction.values[0];
 
         kibunSettings[userId] = channelId;
         saveKibunSettings();
 
         await interaction.editReply({
             content: `あなたの心の天気図の送信先を <#${channelId}> にセットしたちゅ！\n毎週日曜の夜22時に、あなたのレポートがここに届くちゅよ！☁️✨`,
-            components: [] 
+            components: []
         });
     }
 
     // 💡 /kibun_resetchannel コマンド (個人の設定をリセット)
     else if (interaction.commandName === 'kibun_resetchannel') {
         await interaction.deferReply({ ephemeral: true });
-        
+
         const userId = interaction.user.id;
 
         if (kibunSettings[userId]) {
             delete kibunSettings[userId];
-            saveKibunSettings(); 
+            saveKibunSettings();
             await interaction.editReply('あなたの心の天気図の送信先設定をリセットしたちゅ！\n自動レポートの送信は一旦ストップするちゅよ。☁️🛑');
         } else {
             await interaction.editReply('もともと送信先チャンネルはセットされていないみたいだちゅ！☁️');
@@ -3896,7 +3896,7 @@ client.on('interactionCreate', async (interaction) => {
     else if (interaction.commandName === 'temp_setup') {
         const templateType = interaction.options.getString('template') || 'alert_red'; // 💡 テンプレートを受け取る！
         const { ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
-        
+
         // 💡 IDにテンプレート名を含めて記憶させるちゅ！
         const modal = new ModalBuilder().setCustomId(`modal_temp_setup_${templateType}`).setTitle('🚨 臨時看板の設定');
 
@@ -3910,7 +3910,7 @@ client.on('interactionCreate', async (interaction) => {
                 const tempData = JSON.parse(fs.readFileSync(tempPath, 'utf8'));
                 if (tempData.title) titleInput.setValue(tempData.title);
                 if (tempData.desc) descInput.setValue(tempData.desc);
-            } catch(e) { console.error('臨時看板の読み込みエラー:', e); }
+            } catch (e) { console.error('臨時看板の読み込みエラー:', e); }
         }
 
         modal.addComponents(
@@ -3920,14 +3920,14 @@ client.on('interactionCreate', async (interaction) => {
 
         await interaction.showModal(modal);
     }
-    
+
     // 💡 /temp_remove コマンド (臨時看板を消す)
     else if (interaction.commandName === 'temp_remove') {
         // 💡 【追加】まずはDiscordに「コマンド受け取ったちゅ！」と返事をする（自分だけに見える設定）
-        await interaction.deferReply({ ephemeral: true }); 
-        
+        await interaction.deferReply({ ephemeral: true });
+
         const tempPath = path.join(__dirname, 'designs', 'temp_board.json');
-        
+
         if (fs.existsSync(tempPath)) {
             fs.unlinkSync(tempPath);
             await interaction.editReply('🗑️ 臨時看板を取り下げたちゅ！次のチャットから元の看板だけになるちゅよ！');
@@ -3935,17 +3935,17 @@ client.on('interactionCreate', async (interaction) => {
             await interaction.editReply('🤔 今は臨時看板は出てないみたいだちゅ！');
         }
     }
-    
+
     // 💡 臨時看板のモーダル送信を受け取って保存する
     else if (interaction.isModalSubmit() && interaction.customId.startsWith('modal_temp_setup')) {
-        
+
         // 💡 IDからテンプレート名を取り出すちゅ！
         const parts = interaction.customId.split('_');
         const templateType = parts.slice(3).join('_') || 'alert_red';
-        
+
         const title = interaction.fields.getTextInputValue('title');
         const desc = interaction.fields.getTextInputValue('desc');
-        
+
         const tempPath = path.join(__dirname, 'designs', 'temp_board.json');
         // 💡 テンプレート名も一緒に保存するちゅ！
         fs.writeFileSync(tempPath, JSON.stringify({ title, desc, template: templateType }, null, 2));
@@ -3968,10 +3968,10 @@ client.on('interactionCreate', async (interaction) => {
             .setTitle('🏰 現在のハウスポイント 🏰')
             .setDescription(desc)
             .setColor(0xFFD700);
-        
+
         await interaction.reply({ embeds: [embed] });
     }
-    
+
 });
 // ==========================================================
 // 📌 チャンネル最下段固定画像（Sticky Message）の魔法
@@ -3991,7 +3991,7 @@ if (fs.existsSync(stickyDataPath)) {
         for (const [chId, msgId] of Object.entries(data)) {
             stickyMessageIds.set(chId, msgId);
         }
-    } catch(e) { console.error('看板データの読み込みエラーだちゅ:', e); }
+    } catch (e) { console.error('看板データの読み込みエラーだちゅ:', e); }
 }
 
 // メモ帳に保存する関数
@@ -4006,7 +4006,7 @@ const saveStickyData = () => {
 // ==========================================================
 const generateTempStickyImage = async (tempData) => {
     const fontBuffer = fs.readFileSync(path.join(__dirname, 'fonts', 'LINESeedJP-Regular.ttf'));
-    
+
     // 改行をHTMLで表示できるように変換するちゅ
     const descLines = tempData.desc.split('\n').map(line => `<div style="display: flex;">${line || '　'}</div>`).join('');
 
@@ -4108,60 +4108,21 @@ const generateTempStickyImage = async (tempData) => {
     const resvg = new Resvg(svg, { background: 'transparent', fitTo: { mode: 'original' } });
     return resvg.render().asPng();
 };
-// ==========================================================
-// 🐭 デフォルト案内板の画像を作る魔法（臨時情報がない時用）
-// ==========================================================
-const generateDefaultStickyImage = async (text) => {
-    const fontBuffer = fs.readFileSync(path.join(__dirname, 'fonts', 'LINESeedJP-Regular.ttf'));
-    const markup = `
-    <div style="display: flex; flex-direction: column; background-color: #2b2d31; color: white; width: 600px; height: 180px; align-items: center; justify-content: center; border: 6px solid #f5c4c9; border-radius: 15px;">
-        <div style="display: flex; font-size: 36px; font-weight: bold; margin-bottom: 15px; color: #f5c4c9;">
-            🐭 ねずみの案内板 🧀
-        </div>
-        <div style="display: flex; font-size: 20px; color: #e0e0e0;">
-            ${text}
-        </div>
-    </div>`;
-
-    const svg = await satori(html(markup), {
-        width: 600,
-        height: 180,
-        fonts: [{ name: 'NotoSansJP', data: fontBuffer, weight: 400, style: 'normal' }],
-        loadAdditionalAsset: async (languageCode, segment) => {
-            if (languageCode === 'emoji') {
-                try {
-                    const codePoints = Array.from(segment).map(char => char.codePointAt(0).toString(16));
-                    const u = codePoints.filter(c => c !== 'fe0f').join('-');
-                    const res = await axios.get(`https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/${u}.svg`, { responseType: 'arraybuffer' });
-                    return `data:image/svg+xml;base64,${Buffer.from(res.data).toString('base64')}`;
-                } catch (e) { return ''; }
-            }
-            return '';
-        }
-    });
-
-    const resvg = new Resvg(svg, { background: 'transparent', fitTo: { mode: 'original' } });
-    return resvg.render().asPng();
-};
 
 // ==========================================================
 // 📦 画像を準備するまとめ役だちゅ！（完全統合1枚バージョン！）
 // ==========================================================
 const getStickyAttachments = async () => {
     const tempPath = path.join(__dirname, 'designs', 'temp_board.json');
-    
+
     // 💡 1. 臨時看板（案内板）のデータがあれば、その画像を1枚だけ返すちゅ！
     if (fs.existsSync(tempPath)) {
         try {
             const tempData = JSON.parse(fs.readFileSync(tempPath, 'utf8'));
             const tempBuffer = await generateTempStickyImage(tempData);
             return [new AttachmentBuilder(tempBuffer, { name: 'sticky_banner.png' })];
-        } catch(e) { console.error('臨時看板エラー:', e); }
+        } catch (e) { console.error('臨時看板エラー:', e); }
     }
-
-    // 💡 2. 臨時看板が設定されていなければ、デフォルトの「ねずみの案内板」を返すちゅ！
-    const defaultBuffer = await generateDefaultStickyImage('いつでも最新の情報をここでお知らせするちゅ！');
-    return [new AttachmentBuilder(defaultBuffer, { name: 'sticky_banner.png' })];
 };
 
 // 💡 誰かがメッセージを書き込んだ時の処理
@@ -4173,18 +4134,18 @@ client.on('messageCreate', async (message) => {
     // 🏰 寮ポイント：A. デイリーボーナス ＆ C. !cast 魔法システム
     // ==========================================================
     const userHouse = getUserHouse(message.member);
-    
+
     if (userHouse) {
         // 💡 A. デイリー活動ボーナス（1日1回の発言で10点！）
-        const todayStr = getJSTInfo().dateStr; 
+        const todayStr = getJSTInfo().dateStr;
         // 💡 【追加】指定したカテゴリの中での発言だった時だけ、ボーナスをあげるちゅ！
         if (ALLOWED_CATEGORY_IDS.includes(message.channel.parentId) && houseData.daily[message.author.id] !== todayStr) {
             houseData.daily[message.author.id] = todayStr;
             houseData.points[userHouse.id] += 10;
             saveHouseData();
-            
+
             // 邪魔にならないように、こっそりリアクションで「ボーナス入ったよ！」を教えるちゅ！
-            try { await message.react(userHouse.emoji); } catch(e) {}
+            try { await message.react(userHouse.emoji); } catch (e) { }
         }
 
         // 💡 C. 闇の魔術システム (!cast コマンド)
@@ -4213,8 +4174,8 @@ client.on('messageCreate', async (message) => {
             const embed = new EmbedBuilder()
                 .setTitle(`🪄 ${message.author.username} の !cast`)
                 .setColor(userHouse.color)
-                .setDescription(`ダイス: **${dice}**\n${resultMsg}\n\n**${userHouse.name}** に **${pointChange > 0 ? '+'+pointChange : pointChange}** 点だちゅ！ ${userHouse.emoji}`);
-            
+                .setDescription(`ダイス: **${dice}**\n${resultMsg}\n\n**${userHouse.name}** に **${pointChange > 0 ? '+' + pointChange : pointChange}** 点だちゅ！ ${userHouse.emoji}`);
+
             await message.reply({ embeds: [embed] });
             return; // 魔法を唱えた時は、案内板（Sticky）の処理などはスキップするちゅ
         }
@@ -4224,14 +4185,14 @@ client.on('messageCreate', async (message) => {
     // 📌 案内板（Sticky Message）の処理
     // ==========================================================
     if (message.channelId === STICKY_CHANNEL_ID) {
-        
+
         // ① 前にねずみが置いた画像があれば（再起動前の記憶も含めて）ここで消すちゅ！
         const lastId = stickyMessageIds.get(message.channelId);
         if (lastId) {
             try {
                 const lastMsg = await message.channel.messages.fetch(lastId);
                 if (lastMsg) await lastMsg.delete();
-            } catch (e) {}
+            } catch (e) { }
         }
 
         // ② Satoriで新しい画像を作って、一番下に送信するちゅ！
@@ -4255,7 +4216,7 @@ client.on('messageCreate', async (message) => {
 
 client.on('messageReactionAdd', async (reaction, user) => {
     if (user.bot) return;
-    
+
     // 昔のメッセージだった場合は中身を引っ張ってくるちゅ！
     if (reaction.partial) {
         try { await reaction.fetch(); } catch (error) { return; }
@@ -4272,14 +4233,14 @@ client.on('messageReactionAdd', async (reaction, user) => {
     // 💡 寮のシンボル絵文字で、かつ5個以上集まった場合
     if (houseRoleId && reaction.count >= 5) {
         const msgId = reaction.message.id;
-        
+
         // まだこのメッセージでポイントを加算していなければ
         if (!houseData.reactionAwarded.includes(msgId)) {
             const houseInfo = HOUSE_ROLES[houseRoleId];
-            
+
             houseData.points[houseInfo.id] += 5;
             houseData.reactionAwarded.push(msgId);
-            
+
             // 履歴がいっぱいにならないように古いものを消すちゅ
             if (houseData.reactionAwarded.length > 100) {
                 houseData.reactionAwarded.shift();
@@ -4290,10 +4251,10 @@ client.on('messageReactionAdd', async (reaction, user) => {
             const embed = new EmbedBuilder()
                 .setColor(houseInfo.color)
                 .setDescription(`🎉 このメッセージに **${houseInfo.name}** のシンボル(${houseInfo.emoji})が5個集まったちゅ！\n結束力を讃えて、**${houseInfo.name}に 5点 加算**だちゅ！`);
-            
+
             try {
                 await reaction.message.reply({ embeds: [embed] });
-            } catch(e) { console.error('リアクションポイント通知エラー:', e); }
+            } catch (e) { console.error('リアクションポイント通知エラー:', e); }
         }
     }
 });
