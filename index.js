@@ -4198,11 +4198,16 @@ client.on('messageCreate', async (message) => {
         // ② Satoriで新しい画像を作って、一番下に送信するちゅ！
         try {
             const attachments = await getStickyAttachments();
-            const sentMsg = await message.channel.send({ files: attachments });
-
-            // ③ 新しく置いた画像のIDを記憶して、メモ帳に保存するちゅ！
-            stickyMessageIds.set(message.channelId, sentMsg.id);
-            saveStickyData();
+             if (attachments && attachments.length > 0) {
+                const sentMsg = await message.channel.send({ files: attachments });
+    
+                // ③ 新しく置いた画像のIDを記憶して、メモ帳に保存するちゅ！
+                stickyMessageIds.set(message.channelId, sentMsg.id);
+                saveStickyData();
+            } else {
+                stickyMessageIds.delete(message.channelId);
+                saveStickyData();
+            }
         } catch (e) {
             console.error('最下段画像の設置エラーだちゅ:', e);
         }
