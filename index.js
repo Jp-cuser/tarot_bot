@@ -51,6 +51,8 @@ const weatherLogic = require('./src/logic/weather');
 const animalLogic = require('./src/logic/animal');
 const kibunLogic = require('./src/logic/kibun');
 const busterLogic = require('./src/logic/buster');
+const karaokeLogic = require('./src/logic/karaoke');
+const stickyLogic = require('./src/logic/sticky');
 
 // --- Globals & Data ---
 const DATA_DIR = path.join(__dirname, 'data');
@@ -60,16 +62,22 @@ const PETS_FILE = path.join(DATA_DIR, 'user_pets.json');
 const HOUSE_FILE = path.join(DATA_DIR, 'house_points.json');
 const KIBUN_FILE = path.join(DATA_DIR, 'user_kibun.json');
 const KIBUN_SETTINGS_FILE = path.join(DATA_DIR, 'kibun_settings.json');
+const STICKY_FILE = path.join(DATA_DIR, 'sticky_data.json'); // 💡 【追加】
 
 let userPets = loadJSON(PETS_FILE, {});
 let housePoints = loadJSON(HOUSE_FILE, {});
 let userKibun = loadJSON(KIBUN_FILE, {});
 let kibunSettings = loadJSON(KIBUN_SETTINGS_FILE, {});
+let stickyMessageIds = new Map(Object.entries(loadJSON(STICKY_FILE, {}))); // 💡 【追加】
 
 const savePets = () => saveJSON(PETS_FILE, userPets);
 const saveHouses = () => saveJSON(HOUSE_FILE, housePoints);
 const saveKibun = () => saveJSON(KIBUN_FILE, userKibun);
 const saveKibunSettings = () => saveJSON(KIBUN_SETTINGS_FILE, kibunSettings);
+const saveStickyData = () => saveJSON(STICKY_FILE, Object.fromEntries(stickyMessageIds)); // 💡 【追加】
+
+
+const STICKY_CHANNEL_ID = '1452263017348857896';
 
 // Temporary state
 const petCatches = new Map();
@@ -115,6 +123,26 @@ client.once('ready', async () => {
                 .setDescription('【管理者用】特定のユーザーの指定日以降のメッセージを掃除するちゅ！')
                 .addUserOption(opt => opt.setName('target').setDescription('掃除する相手').setRequired(true))
                 .addStringOption(opt => opt.setName('date').setDescription('いつから(YYYY-MM-DD)').setRequired(true))
+                .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
+            new SlashCommandBuilder()
+                .setName('karaoke')
+                .setDescription('カラオケの順番待ちパネルを出すちゅ！'),
+            // 💡 【追加】ここから案内板のコマンドだちゅ！
+            new SlashCommandBuilder()
+                .setName('temp_setup')
+                .setDescription('【管理者用】臨時情報の看板を設定するちゅ！')
+                .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
+                .addStringOption(opt => opt.setName('template').setDescription('デザインを選ぶちゅ！').setRequired(true).addChoices(
+                    { name: '🚨 アラート (レッド)', value: 'alert_red' },
+                    { name: '🟢 チケット風 (グリーン)', value: 'ticket_green' },
+                    { name: '🟡 エレガント (ブラック＆ゴールド)', value: 'elegant_gold' },
+                    { name: '🌸 ポップ (パステルピンク)', value: 'pop_pink' },
+                    { name: '🔮 ミスティック (パープル)', value: 'mystic_purple' },
+                    { name: '💧 アクア (ライトブルー)', value: 'aqua_blue' }
+                )),
+            new SlashCommandBuilder()
+                .setName('temp_remove')
+                .setDescription('【管理者用】臨時情報の看板を取り下げるちゅ！')
                 .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator)
         ].map(c => c.toJSON());
 
@@ -128,7 +156,41 @@ client.once('ready', async () => {
         }
     }
 });
+client.on(Events.MessageCreate, async (message) => {
+    // ボット自身のメッセージには反応しない
+    if (message.author.bot) return;
 
+    // カラオケモジュールに「メッセージが来たよ」と教えてあげる
+    await karaokeLogic.onMessageInKaraokeChannel(message);
+
+    // 💡 【追加】案内板（Sticky Message）のおっかけ処理！
+    if (message.channelId === STICKY_CHANNEL_ID) {
+        const lastId = stickyMessageIds.get(message.channelId);
+        if (lastId) {
+            try {
+                const lastMsg = await message.channel.messages.fetch(lastId);
+                if (lastMsg) await lastMsg.delete();
+            } catch (e) {}
+        }
+        try {
+            const attachments = await stickyLogic.getStickyAttachments(); // モジュールにお願いするちゅ！
+            
+            // 💡 【修正】画像がある時（お知らせ設定中）だけ送信するちゅ！
+            if (attachments && attachments.length > 0) {
+                const sentMsg = await message.channel.send({ files: attachments });
+                stickyMessageIds.set(message.channelId, sentMsg.id);
+                saveStickyData();
+            } else if (stickyMessageIds.has(message.channelId)) {
+                // 💡 お知らせが解除された時は、メモ帳から記憶を消しておくちゅ！
+                stickyMessageIds.delete(message.channelId);
+                saveStickyData();
+            }
+            
+        } catch (e) {
+            console.error('最下段画像の設置エラーだちゅ:', e);
+        }
+    }
+});
 // --- Interaction Handler ---
 client.on('interactionCreate', async (interaction) => {
     // 1. Slash Command Registration logic
@@ -214,7 +276,47 @@ client.on('interactionCreate', async (interaction) => {
             }
             return;
         }
+        if (interaction.commandName === 'karaoke') {
+            await interaction.reply({ content: 'カラオケパネルを起動したちゅ！', flags: MessageFlags.Ephemeral });
+            await karaokeLogic.refreshPanel(interaction.channel);
+            return;
+        }
+
+        // 💡 【追加】臨時看板の設定コマンド
+        if (interaction.commandName === 'temp_setup') {
+            const templateType = interaction.options.getString('template') || 'alert_red';
+            const { ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+            const modal = new ModalBuilder().setCustomId(`modal_temp_setup_${templateType}`).setTitle('🚨 臨時看板の設定');
+            const titleInput = new TextInputBuilder().setCustomId('title').setLabel('タイトル').setPlaceholder('例: 臨時メンテナンス').setStyle(TextInputStyle.Short).setRequired(true);
+            const descInput = new TextInputBuilder().setCustomId('desc').setLabel('内容').setPlaceholder('改行もできるちゅ！').setStyle(TextInputStyle.Paragraph).setRequired(true);
+
+            const tempPath = path.join(__dirname, 'designs', 'temp_board.json');
+            if (fs.existsSync(tempPath)) {
+                try {
+                    const tempData = JSON.parse(fs.readFileSync(tempPath, 'utf8'));
+                    if (tempData.title) titleInput.setValue(tempData.title);
+                    if (tempData.desc) descInput.setValue(tempData.desc);
+                } catch(e) {}
+            }
+            modal.addComponents(new ActionRowBuilder().addComponents(titleInput), new ActionRowBuilder().addComponents(descInput));
+            await interaction.showModal(modal);
+            return;
+        }
+
+        // 💡 【追加】臨時看板の削除コマンド
+        if (interaction.commandName === 'temp_remove') {
+            await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+            const tempPath = path.join(__dirname, 'designs', 'temp_board.json');
+            if (fs.existsSync(tempPath)) {
+                fs.unlinkSync(tempPath);
+                await interaction.editReply('🗑️ 臨時看板を取り下げたちゅ！');
+            } else {
+                await interaction.editReply('🤔 今は臨時看板は出てないみたいだちゅ！');
+            }
+            return;
+        }
     }
+
 
     // Modal & Menu Triggers
     if (interaction.isButton()) {
@@ -269,6 +371,11 @@ client.on('interactionCreate', async (interaction) => {
             await interaction.showModal(modal);
             return;
         }
+        // カラオケ機能のボタン処理
+        if (['btn_karaoke_join', 'btn_karaoke_leave', 'btn_karaoke_force_skip'].includes(interaction.customId)) {
+            await karaokeLogic.handleKaraokeInteraction(interaction);
+            return;
+        }
     }
 
     // Interaction Handling logic
@@ -301,6 +408,22 @@ client.on('interactionCreate', async (interaction) => {
         }
 
         // --- COMMAND LOGIC ---
+
+        // 💡 【追加】臨時看板のモーダル送信を受け取る
+        if (interaction.isModalSubmit() && interaction.customId.startsWith('modal_temp_setup')) {
+            const parts = interaction.customId.split('_');
+            const templateType = parts.slice(3).join('_') || 'alert_red';
+            const title = interaction.fields.getTextInputValue('title');
+            const desc = interaction.fields.getTextInputValue('desc');
+            
+            const designsDir = path.join(__dirname, 'designs');
+            if (!fs.existsSync(designsDir)) fs.mkdirSync(designsDir);
+            const tempPath = path.join(designsDir, 'temp_board.json');
+            
+            fs.writeFileSync(tempPath, JSON.stringify({ title, desc, template: templateType }, null, 2));
+            await interaction.editReply({ content: '🚨 臨時看板をセットしたちゅ！次のメッセージから表示されるちゅよ！' });
+            return;
+        }
 
         // Tarot 1
         if (interaction.customId === 'btn_tarot') {

@@ -11,7 +11,7 @@ const model = genAI.getGenerativeModel(
 const readingCache = new Map();
 
 async function callLocalLLM(prompt) {
-    const localUrl = process.env.LOCAL_LLM_URL || 'http://localhost:11434/api/generate';
+    const localUrl = process.env.LOCAL_LLM_URL || 'http://100.124.36.36:11434/api/generate';
     const localModel = process.env.LOCAL_LLM_MODEL || 'gemma2:9b';
     const systemInstruction = `
 あなたは「ねずみ」という名前の、愛らしくて凄腕のタロット・ルーン占い師です。
